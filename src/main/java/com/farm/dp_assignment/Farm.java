@@ -67,24 +67,24 @@ public class Farm {
 
         // set up top side
 //        Flow
-        GridPane gridPane = new GridPane();
-        gridPane.setPadding(new Insets(10,10,10,10));
+        BorderPane topSec = new BorderPane();
+        topSec.setPadding(new Insets(5,5,5,5));
 
         // setup growth point
         HBox growthProgressBox = new HBox(5);
 
-        Circle circle = new Circle(40);
+        Circle circle = new Circle(30);
         circle.setStroke(Color.BLACK);
         circle.setStrokeWidth(10);
         circle.setStrokeType(StrokeType.INSIDE);
         circle.setFill(Color.AZURE);
         circle.relocate(0, 0);
 
-        Text text = new Text("1");
-        text.setStyle("-fx-font-size: 20px");
-        text.setBoundsType(TextBoundsType.VISUAL);
+        Text stageNumber = new Text("1");
+        stageNumber.setStyle("-fx-font-size: 20px");
+        stageNumber.setBoundsType(TextBoundsType.VISUAL);
         StackPane stageGrowth = new StackPane();
-        stageGrowth.getChildren().addAll(circle, text);
+        stageGrowth.getChildren().addAll(circle, stageNumber);
 
         ProgressBar growthPointBar = new ProgressBar();
         ProgressIndicator growthPoint = new ProgressIndicator(0);
@@ -94,31 +94,35 @@ public class Farm {
         growthPoint.setProgress(20 / 50);
 
         growthProgressBox.getChildren().addAll(stageGrowth, growthPointBar, growthPoint);
-        growthProgressBox.setAlignment(Pos.CENTER_LEFT);
+        growthProgressBox.setAlignment(Pos.BASELINE_LEFT);
 
         // setup coin (wallet)
         // create coin image
         Image coinImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/coin.png")));
         ImageView coinImageView = new ImageView(coinImage);
-        coinImageView.setFitWidth(80);
-        coinImageView.setFitHeight(80);
+        coinImageView.setFitWidth(60);
+        coinImageView.setFitHeight(60);
 
         HBox coinBox = new HBox(5);
 
-        // After getting the amount of coin, pls add it at below sentence exp: (coinImageView, Amount)
-        coinBox.getChildren().addAll(coinImageView);
+        Text cointAmount = new Text("1000");
+        cointAmount.setStyle("-fx-font-size: 25px; -fx-font-vertical-align:top");
+        cointAmount.setBoundsType(TextBoundsType.VISUAL);
 
-        coinBox.setStyle("-fx-border-color: #000000; -fx-border-radius: 5px");
-        coinBox.setAlignment(Pos.BASELINE_LEFT);
-        coinBox.setMaxWidth(200);
+        // After getting the amount of coin, pls add it at below sentence exp: (coinImageView, Amount)
+        coinBox.getChildren().addAll(coinImageView, cointAmount);
+
+        coinBox.setStyle("-fx-border-color: #000000; -fx-border-radius: 5px;");
+        coinBox.setAlignment(Pos.BASELINE_RIGHT);
+        coinBox.setMaxWidth(400);
         coinBox.setMaxHeight(100);
         coinBox.setPadding(new Insets(5, 5, 5, 5));
 
-        GridPane.setConstraints(growthProgressBox,0,0);
+        topSec.setLeft(growthProgressBox);
+        topSec.setRight(coinBox);
 
-        farmLayout.setTop(coinBox);
-        farmLayout.setAlignment(coinBox, Pos.CENTER_RIGHT);
-
+        farmLayout.setTop(topSec);
+        farmLayout.setAlignment(topSec, Pos.BOTTOM_LEFT);
 
         //Set up shop
         Button shopButton = new Button();
@@ -129,6 +133,10 @@ public class Farm {
         shopButton.setPrefSize(80, 80);
         shopButton.setGraphic(shopImageView);
         shopButton.setStyle("-fx-cursor: hand;");
+
+        shopButton.setOnAction(e ->{
+
+        });
 
         farmLayout.setBottom(shopButton);
         farmLayout.setAlignment(shopButton, Pos.BOTTOM_LEFT);
