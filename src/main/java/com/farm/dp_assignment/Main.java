@@ -1,4 +1,4 @@
-package com.farm;
+package com.farm.dp_assignment;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
