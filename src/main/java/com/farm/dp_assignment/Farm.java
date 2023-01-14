@@ -1,5 +1,6 @@
 package com.farm.dp_assignment;
 
+import com.farm.dp_assignment.composite.Shop;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -68,7 +69,7 @@ public class Farm {
         // set up top side
 //        Flow
         BorderPane topSec = new BorderPane();
-        topSec.setPadding(new Insets(5,5,5,5));
+        topSec.setPadding(new Insets(5, 5, 5, 5));
 
         // setup growth point
         HBox growthProgressBox = new HBox(5);
@@ -134,8 +135,10 @@ public class Farm {
         shopButton.setGraphic(shopImageView);
         shopButton.setStyle("-fx-cursor: hand;");
 
-        shopButton.setOnAction(e ->{
+        Shop shop = new Shop();
 
+        shopButton.setOnAction(e -> {
+            shop.printMenu();
         });
 
         farmLayout.setBottom(shopButton);

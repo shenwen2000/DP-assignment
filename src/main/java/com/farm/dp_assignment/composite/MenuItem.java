@@ -1,12 +1,17 @@
 package com.farm.dp_assignment.composite;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.util.Objects;
 
@@ -15,12 +20,14 @@ public class MenuItem extends MenuComponent {
     Boolean isLocked;
     int price;
     Image image;
+    String type;
 
-    public MenuItem(String name, boolean isLocked, int price, Image image) {
+    public MenuItem(String name, boolean isLocked, int price, Image image, String type) {
         this.name = name;
         this.isLocked = isLocked;
         this.price = price;
         this.image = image;
+        this.type = type;
     }
 
     @Override
@@ -42,6 +49,10 @@ public class MenuItem extends MenuComponent {
         return image;
     }
 
+    public String getType() {
+        return type;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -58,29 +69,96 @@ public class MenuItem extends MenuComponent {
         this.image = image;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public VBox print(VBox vBox, MenuComponent menuComponent) {
-        VBox animalBox = new VBox(5);
+        StackPane stackPane = new StackPane();
 
-        ImageView animalImageView = new ImageView(menuComponent.getImage());
+        FlowPane menuItemBox = new FlowPane();
+        menuItemBox.setVgap(8);
+        menuItemBox.setHgap(12);
 
-        Text animalType = new Text(menuComponent.getName());
-        animalType.setStyle("-fx-font-size: 15px");
-        animalType.setBoundsType(TextBoundsType.VISUAL);
+        ImageView imageView = new ImageView(getImage());
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+//        imageView.setStyle("-fx-cursor: hand;");
 
-        Text price = new Text(String.valueOf(menuComponent.getPrice()));
-        price.setStyle("-fx-font-size: 15px");
+        Button itemButton = new Button();
+        itemButton.setPrefSize(50, 50);
+        itemButton.setStyle("-fx-background:transparent; -fx-border:none; -fx-cursor: hand;");
+        itemButton.setGraphic(imageView);
+
+        itemButton.setOnAction(e -> {
+            setUnlockPage(menuComponent);
+        });
+
+        Text nameType = new Text(getName());
+        nameType.setStyle("-fx-font-size: 15px; -fx-font-vertical-align:top");
+        nameType.setBoundsType(TextBoundsType.VISUAL);
+
+        Text price = new Text((getPrice() == 0 ? "Free" : String.valueOf(getPrice())));
+        price.setStyle("-fx-font-size: 15px; -fx-font-vertical-align:top");
         price.setBoundsType(TextBoundsType.VISUAL);
 
-        animalBox.getChildren().addAll(animalImageView, animalType, price);
+        menuItemBox.getChildren().addAll(itemButton, nameType, price);
 
-        if (menuComponent.isLock()) {
-            StackPane stackPane = new StackPane();
-            Image lockImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/lock.png")));
-            ImageView lockImageView = new ImageView(lockImage);
-
-            stackPane.getChildren().addAll(animalBox, lockImageView);
+        if (getType().equals("Animal")) {
+            if (getLocked()) {
+                Image lockImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/lock.png")));
+                ImageView lockImageView = new ImageView(lockImage);
+                lockImageView.setFitWidth(50);
+                lockImageView.setFitHeight(50);
+                stackPane.getChildren().addAll(menuItemBox, lockImageView);
+                vBox.getChildren().addAll(stackPane);
+            } else {
+                vBox.getChildren().addAll(menuItemBox);
+            }
+        } else {
+            vBox.getChildren().addAll(menuItemBox);
         }
 
         return vBox;
+    }
+
+    private void setUnlockPage(MenuComponent menuComponent) {
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setTitle("Unlock " + menuComponent.getName());
+        window.setMaxWidth(200);
+        window.setMinHeight(200);
+
+        BorderPane farmLayout = new BorderPane();
+        farmLayout.setPadding(new Insets(10, 10, 10, 10));
+
+        VBox content = new VBox(10);
+
+        Text unlockMsg = new Text("Are you sure to unlock " + menuComponent.getName());
+        unlockMsg.setStyle("-fx-font-size: 15px; -fx-font-vertical-align:top");
+        unlockMsg.setBoundsType(TextBoundsType.VISUAL);
+
+        FlowPane flowPane = new FlowPane();
+        flowPane.setVgap(8);
+        flowPane.setHgap(12);
+
+        Button confirmButton = new Button("Confirm");
+        Button cancelButton = new Button("Cancel");
+
+        // Get the wallet amount and check enuf or not, then unlock
+
+        cancelButton.setOnAction(e -> {
+            window.close();
+        });
+
+        flowPane.getChildren().addAll(confirmButton, cancelButton);
+
+        content.getChildren().addAll(unlockMsg, flowPane);
+        farmLayout.setCenter(content);
+        farmLayout.setAlignment(content, Pos.TOP_LEFT);
+
+        Scene scene = new Scene(farmLayout);
+        window.setScene(scene);
+        window.showAndWait();
     }
 }
