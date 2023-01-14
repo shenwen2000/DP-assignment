@@ -1,8 +1,5 @@
 package com.farm.dp_assignment.composite;
 
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -68,7 +65,7 @@ public class Menu extends MenuComponent {
         shopBox.setHgap(4);
 
         ImageView imageView = new ImageView(getImage());
-        imageView.setFitHeight(80);
+        imageView.setFitHeight(60);
         imageView.setFitWidth(80);
 
         Text nameType = new Text(getName());

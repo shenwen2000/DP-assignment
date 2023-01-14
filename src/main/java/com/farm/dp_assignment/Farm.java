@@ -1,6 +1,7 @@
 package com.farm.dp_assignment;
 
 import com.farm.dp_assignment.composite.Shop;
+import com.farm.dp_assignment.simpleFactory.SimpleAnimalFactory;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -24,6 +25,8 @@ public class Farm {
 
     Stage startingScene, farmScene;
     Button startButton;
+    SimpleAnimalFactory factory = new SimpleAnimalFactory();
+    Animal animal = null;
 
     public void setUpStartingPage(Stage primaryStage) {
         this.startingScene = primaryStage;
@@ -54,6 +57,7 @@ public class Farm {
     }
 
     public Scene setUpFarmPage() {
+
         BorderPane farmLayout = new BorderPane();
         farmLayout.setPadding(new Insets(10, 10, 10, 10));
 
@@ -144,8 +148,31 @@ public class Farm {
         farmLayout.setBottom(shopButton);
         farmLayout.setAlignment(shopButton, Pos.BOTTOM_LEFT);
 
+        Button shopButton1 = new Button();
+        Image shopImage1 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/shop.png")));
+        ImageView shopImageView1 = new ImageView(shopImage1);
+        shopImageView.setFitHeight(80);
+        shopImageView.setFitWidth(80);
+        shopButton1.setPrefSize(80, 80);
+        shopButton1.setGraphic(shopImageView1);
+        shopButton1.setStyle("-fx-cursor: hand;");
+
+        if (!Objects.isNull(animal)) {
+            ImageView animalImageView = new ImageView(animal.getImage());
+            animalImageView.setFitWidth(80);
+            animalImageView.setFitHeight(80);
+            farmLayout.setCenter(animalImageView);
+            farmLayout.setAlignment(animalImageView, Pos.BOTTOM_CENTER);
+        }
+
         Scene scene = new Scene(farmLayout, 1500, 800);
 
         return scene;
+    }
+
+    public void createAnimal(String nameType) {
+        animal = factory.createAnimal(nameType);
+        this.startingScene = Main.primaryStage;
+        this.startingScene.setScene(setUpFarmPage());
     }
 }

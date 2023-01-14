@@ -1,10 +1,10 @@
 package com.farm.dp_assignment.composite;
 
+import com.farm.dp_assignment.Farm;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -91,14 +91,20 @@ public class MenuItem extends MenuComponent {
         itemButton.setGraphic(imageView);
 
         itemButton.setOnAction(e -> {
-            setUnlockPage(menuComponent);
+            setUnlockPage();
         });
 
         Text nameType = new Text(getName());
         nameType.setStyle("-fx-font-size: 15px; -fx-font-vertical-align:top");
         nameType.setBoundsType(TextBoundsType.VISUAL);
 
-        Text price = new Text((getPrice() == 0 ? "Free" : String.valueOf(getPrice())));
+        Text price;
+        if (getName().equals("premium food")) {
+            price = new Text("Will according to ingredient(s) added");
+        } else {
+            price = new Text((getPrice() == 0 ? "Free" : String.valueOf(getPrice())));
+        }
+
         price.setStyle("-fx-font-size: 15px; -fx-font-vertical-align:top");
         price.setBoundsType(TextBoundsType.VISUAL);
 
@@ -122,19 +128,24 @@ public class MenuItem extends MenuComponent {
         return vBox;
     }
 
-    private void setUnlockPage(MenuComponent menuComponent) {
+    private void setUnlockPage() {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("Unlock " + menuComponent.getName());
-        window.setMaxWidth(200);
-        window.setMinHeight(200);
+        if (getLocked()) {
+            window.setTitle("Unlock " + getName());
+        } else {
+            window.setTitle("Buy " + getName());
+        }
+
+        window.setMaxWidth(400);
+        window.setMaxHeight(400);
 
         BorderPane farmLayout = new BorderPane();
         farmLayout.setPadding(new Insets(10, 10, 10, 10));
 
         VBox content = new VBox(10);
 
-        Text unlockMsg = new Text("Are you sure to unlock " + menuComponent.getName());
+        Text unlockMsg = new Text(getLocked() ? "Are you sure to unlock " + getName() : "Are you sure to buy " + getName());
         unlockMsg.setStyle("-fx-font-size: 15px; -fx-font-vertical-align:top");
         unlockMsg.setBoundsType(TextBoundsType.VISUAL);
 
@@ -146,13 +157,19 @@ public class MenuItem extends MenuComponent {
         Button cancelButton = new Button("Cancel");
 
         // Get the wallet amount and check enuf or not, then unlock
+        confirmButton.setOnAction(e -> {
+            // if enuf then create a animal for him
+            Farm farm = new Farm();
+            farm.createAnimal(getName());
+            window.close();
+        });
 
         cancelButton.setOnAction(e -> {
             window.close();
         });
 
         flowPane.getChildren().addAll(confirmButton, cancelButton);
-
+        flowPane.setAlignment(Pos.CENTER);
         content.getChildren().addAll(unlockMsg, flowPane);
         farmLayout.setCenter(content);
         farmLayout.setAlignment(content, Pos.TOP_LEFT);
