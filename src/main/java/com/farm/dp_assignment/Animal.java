@@ -2,6 +2,7 @@ package com.farm.dp_assignment;
 
 import com.farm.dp_assignment.strategy.MoveBehavior;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public abstract class Animal {
 
@@ -12,8 +13,8 @@ public abstract class Animal {
 
     }
 
-    public void performMove() {
-        moveBehavior.move();
+    public void performMove(ImageView imageView) {
+        moveBehavior.move(imageView);
     }
 
     public void setMoveBehavior(MoveBehavior mb) {

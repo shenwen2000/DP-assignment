@@ -7,5 +7,6 @@ public class Chicken extends Animal {
 
     public Chicken(Image image) {
         super.setImage(image);
+        super.setMoveBehavior(new MoveOnGround());
     }
 }

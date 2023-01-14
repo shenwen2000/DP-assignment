@@ -161,8 +161,9 @@ public class Farm {
             ImageView animalImageView = new ImageView(animal.getImage());
             animalImageView.setFitWidth(80);
             animalImageView.setFitHeight(80);
+            animal.performMove(animalImageView);
             farmLayout.setCenter(animalImageView);
-            farmLayout.setAlignment(animalImageView, Pos.BOTTOM_CENTER);
+            farmLayout.setAlignment(animalImageView, Pos.BOTTOM_RIGHT);
         }
 
         Scene scene = new Scene(farmLayout, 1500, 800);
