@@ -7,6 +7,7 @@ public class Duck extends Animal {
 
     public Duck(Image image) {
         super.setImage(image);
+        super.setMoveBehavior(new MoveOnGround());
     }
 
 }

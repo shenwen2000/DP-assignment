@@ -48,7 +48,7 @@ public class Shop {
         window.setScene(scene);
         window.showAndWait();
     }
-//    com\farm\dp_assignment\image
+
     private void createMenuList() {
         Image animalShopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/pet_shop.png")));
         Image feedShopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/feed.png")));
@@ -77,7 +77,7 @@ public class Shop {
         Image foodImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/food.png")));
         Image goodFoodImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/good_food.png")));
 
-        foodMenu.add(new MenuItem("normal food", false, 0, foodImage, "Food"));
-        foodMenu.add(new MenuItem("premium food", false, 0, goodFoodImage, "Food"));
+        foodMenu.add(new MenuItem("Normal food", false, 0, foodImage, "Food"));
+        foodMenu.add(new MenuItem("Premium food", false, 0, goodFoodImage, "Food"));
     }
 }

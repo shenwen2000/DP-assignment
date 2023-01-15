@@ -99,7 +99,7 @@ public class MenuItem extends MenuComponent {
         nameType.setBoundsType(TextBoundsType.VISUAL);
 
         Text price;
-        if (getName().equals("premium food")) {
+        if (getName().equals("Premium food")) {
             price = new Text("Will according to ingredient(s) added");
         } else {
             price = new Text((getPrice() == 0 ? "Free" : String.valueOf(getPrice())));
@@ -159,8 +159,16 @@ public class MenuItem extends MenuComponent {
         // Get the wallet amount and check enuf or not, then unlock
         confirmButton.setOnAction(e -> {
             // if enuf then create a animal for him
-            Farm farm = new Farm();
-            farm.createAnimal(getName());
+            if (getType().equals("Animal")) {
+                Farm farm = new Farm();
+                farm.createAnimal(getName());
+            } else {
+                if (getName().equals("Premium food")) {
+                    Farm farm = new Farm();
+                    farm.setAddIngredientPage();
+                }
+            }
+
             window.close();
         });
 

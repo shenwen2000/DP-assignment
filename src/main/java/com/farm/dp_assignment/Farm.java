@@ -6,9 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -16,7 +14,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextBoundsType;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.Objects;
@@ -175,5 +175,90 @@ public class Farm {
         animal = factory.createAnimal(nameType);
         this.startingScene = Main.primaryStage;
         this.startingScene.setScene(setUpFarmPage());
+    }
+
+    public void setAddIngredientPage() {
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+
+        BorderPane ingredientPageLayout = new BorderPane();
+        ingredientPageLayout.setPadding(new Insets(10, 10, 10, 10));
+
+        // Protein Part
+        VBox proteinBox = new VBox(10);
+
+        Image proteinImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/protein.png")));
+        ImageView proteinImageView = new ImageView(proteinImg);
+        proteinImageView.setFitWidth(500);
+        proteinImageView.setFitHeight(400);
+
+        Text proteinText = new Text("Protein");
+        proteinText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold");
+        proteinText.setBoundsType(TextBoundsType.VISUAL);
+        proteinText.setTextAlignment(TextAlignment.CENTER);
+
+        Label potionText1 = new Label("Potion");
+        TextField proteinTxtField = new TextField();
+
+        GridPane proteinInputBox = new GridPane();
+        proteinInputBox.addRow(0, potionText1, proteinTxtField);
+        proteinInputBox.setAlignment(Pos.CENTER);
+
+        proteinBox.getChildren().addAll(proteinImageView, proteinText, proteinInputBox);
+
+        // Vitamin Part
+        VBox vitaminBox = new VBox(10);
+
+        Image vitaminImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/vitamin.png")));
+        ImageView vitaminImageView = new ImageView(vitaminImg);
+        vitaminImageView.setFitWidth(500);
+        vitaminImageView.setFitHeight(400);
+
+        Text vitaminText = new Text("Vitamin");
+        vitaminText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold");
+        vitaminText.setBoundsType(TextBoundsType.VISUAL);
+        vitaminText.setTextAlignment(TextAlignment.CENTER);
+
+        Label potionText2 = new Label("Potion");
+        TextField vitaminTxtField = new TextField();
+
+        GridPane vitaminInputBox = new GridPane();
+        vitaminInputBox.addRow(0, potionText2, vitaminTxtField);
+        vitaminInputBox.setAlignment(Pos.CENTER);
+
+        vitaminBox.getChildren().addAll(vitaminImageView, vitaminText, vitaminInputBox);
+
+        GridPane content = new GridPane();
+        content.setPadding(new Insets(10, 20, 10, 20));
+        content.addRow(0, proteinBox, vitaminBox);
+
+        ingredientPageLayout.setCenter(content);
+        ingredientPageLayout.setAlignment(content, Pos.CENTER);
+
+        Button addBtn = new Button("Add Ingredient");
+        addBtn.setStyle("-fx-padding: 10px;-fx-border-insets: 5px;-fx-background-insets: 5px;-fx-border:2px black");
+
+        addBtn.setOnAction(e -> {
+
+        });
+
+        Button confirmBtn = new Button("Confirm");
+        confirmBtn.setStyle("-fx-padding: 10px;-fx-border-insets: 5px;-fx-background-insets: 5px;-fx-border:2px black");
+
+        confirmBtn.setOnAction(e -> {
+            window.close();
+        });
+
+        GridPane buttonBox = new GridPane();
+        buttonBox.setPadding(new Insets(30, 20, 10, 20));
+        buttonBox.addRow(0, addBtn, confirmBtn);
+        buttonBox.setAlignment(Pos.BOTTOM_RIGHT);
+
+        ingredientPageLayout.setBottom(buttonBox);
+        ingredientPageLayout.setAlignment(buttonBox, Pos.BOTTOM_RIGHT);
+
+        Scene scene = new Scene(ingredientPageLayout);
+        window.setScene(scene);
+        window.showAndWait();
     }
 }

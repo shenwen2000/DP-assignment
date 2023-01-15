@@ -7,5 +7,6 @@ public class Goat extends Animal {
 
     public Goat(Image image) {
         super.setImage(image);
+        super.setMoveBehavior(new MoveOnGround());
     }
 }
