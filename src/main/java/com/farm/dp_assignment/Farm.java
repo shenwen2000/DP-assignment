@@ -38,41 +38,30 @@ public class Farm {
         startButton.setMinWidth(200);
         startButton.setStyle("-fx-background-color: #676AC2; -fx-text-fill: #FFFFFF; -fx-border-radius: 25; " +
                 "-fx-cursor: hand;");
+
         startButton.setOnAction(e -> {
             this.startingScene.setScene(setUpFarmPage());
         });
+
         Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
 
         VBox content = new VBox(15);
-        Scene scene = new Scene(content, 1500, 800);
+        Scene scene = new Scene(content, bounds.getWidth(), bounds.getHeight());
 //        scene.getStylesheets().addAll(this.getClass().getResource("css/style.css").toExternalForm());
-
 
         startingScene.setScene(scene);
         startingScene.setX(bounds.getMinX());
         startingScene.setY(bounds.getMinY());
-        startingScene.setWidth(bounds.getWidth());
-        startingScene.setHeight(bounds.getHeight());
-        startingScene.setMaxWidth(bounds.getWidth() * 2);
+        startingScene.setMaximized(true);
 
         Image backgroundImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/background_image.jpg")));
         ImageView backgroundImageView = new ImageView(backgroundImage);
-        backgroundImageView.setFitHeight(startingScene.getHeight()-100);
-//        backgroundImageView.setFitWidth(startingScene.getWidth());
+        backgroundImageView.setFitHeight(bounds.getHeight() - 1000);
+        backgroundImageView.setFitWidth(bounds.getWidth() - 1000);
         backgroundImageView.setPreserveRatio(true);
         content.getChildren().addAll(backgroundImageView, startButton);
         content.setAlignment(Pos.CENTER);
 
-//        Scene scene = new Scene(content, 1500, 800);
-////        scene.getStylesheets().addAll(this.getClass().getResource("css/style.css").toExternalForm());
-//
-//
-//        startingScene.setScene(scene);
-//        startingScene.setX(bounds.getMinX());
-//        startingScene.setY(bounds.getMinY());
-//        startingScene.setWidth(bounds.getWidth());
-//        startingScene.setHeight(bounds.getHeight());
-//        startingScene.setMaxWidth(bounds.getWidth() * 2);
         startingScene.show();
     }
 
@@ -80,6 +69,8 @@ public class Farm {
 
         BorderPane farmLayout = new BorderPane();
         farmLayout.setPadding(new Insets(10, 10, 10, 10));
+
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
 
         // setup background image
         farmLayout.setBackground(new Background(
@@ -89,6 +80,9 @@ public class Farm {
                         new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true),
                         new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true)
                 )));
+
+        farmLayout.setPrefWidth(bounds.getWidth());
+        farmLayout.setPrefHeight(bounds.getHeight());
 
         // set up top side
 //        Flow
@@ -157,7 +151,7 @@ public class Farm {
         shopImageView.setFitWidth(80);
         shopButton.setPrefSize(80, 80);
         shopButton.setGraphic(shopImageView);
-        shopButton.setStyle("-fx-cursor: hand;");
+        shopButton.setStyle("-fx-cursor: hand;-fx-margin-top:20px");
 
         Shop shop = new Shop();
 
@@ -166,7 +160,7 @@ public class Farm {
         });
 
         farmLayout.setBottom(shopButton);
-        farmLayout.setAlignment(shopButton, Pos.BOTTOM_LEFT);
+        farmLayout.setAlignment(shopButton, Pos.BASELINE_LEFT);
 
         Button shopButton1 = new Button();
         Image shopImage1 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/shop.png")));
@@ -186,7 +180,7 @@ public class Farm {
             farmLayout.setAlignment(animalImageView, Pos.BOTTOM_RIGHT);
         }
 
-        Scene scene = new Scene(farmLayout, 1500, 800);
+        Scene scene = new Scene(farmLayout, bounds.getWidth(), bounds.getHeight());
 
         return scene;
     }
