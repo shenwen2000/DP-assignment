@@ -4,6 +4,7 @@ import com.farm.dp_assignment.composite.Shop;
 import com.farm.dp_assignment.simpleFactory.SimpleAnimalFactory;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -18,6 +19,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Screen;
 
 import java.util.Objects;
 
@@ -39,20 +41,38 @@ public class Farm {
         startButton.setOnAction(e -> {
             this.startingScene.setScene(setUpFarmPage());
         });
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
 
         VBox content = new VBox(15);
-
-        Image backgroundImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/background_image.jpg")));
-        ImageView backgroundImageView = new ImageView(backgroundImage);
-        backgroundImageView.setFitHeight(700);
-        backgroundImageView.setFitWidth(1300);
-        content.getChildren().addAll(backgroundImageView, startButton);
-        content.setAlignment(Pos.CENTER);
-
         Scene scene = new Scene(content, 1500, 800);
 //        scene.getStylesheets().addAll(this.getClass().getResource("css/style.css").toExternalForm());
 
+
         startingScene.setScene(scene);
+        startingScene.setX(bounds.getMinX());
+        startingScene.setY(bounds.getMinY());
+        startingScene.setWidth(bounds.getWidth());
+        startingScene.setHeight(bounds.getHeight());
+        startingScene.setMaxWidth(bounds.getWidth() * 2);
+
+        Image backgroundImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/background_image.jpg")));
+        ImageView backgroundImageView = new ImageView(backgroundImage);
+        backgroundImageView.setFitHeight(startingScene.getHeight()-100);
+//        backgroundImageView.setFitWidth(startingScene.getWidth());
+        backgroundImageView.setPreserveRatio(true);
+        content.getChildren().addAll(backgroundImageView, startButton);
+        content.setAlignment(Pos.CENTER);
+
+//        Scene scene = new Scene(content, 1500, 800);
+////        scene.getStylesheets().addAll(this.getClass().getResource("css/style.css").toExternalForm());
+//
+//
+//        startingScene.setScene(scene);
+//        startingScene.setX(bounds.getMinX());
+//        startingScene.setY(bounds.getMinY());
+//        startingScene.setWidth(bounds.getWidth());
+//        startingScene.setHeight(bounds.getHeight());
+//        startingScene.setMaxWidth(bounds.getWidth() * 2);
         startingScene.show();
     }
 
