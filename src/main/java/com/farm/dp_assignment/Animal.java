@@ -1,5 +1,6 @@
 package com.farm.dp_assignment;
 
+import com.farm.dp_assignment.state.State;
 import com.farm.dp_assignment.strategy.MoveBehavior;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,6 +9,8 @@ public abstract class Animal {
 
     MoveBehavior moveBehavior;
     Image image;
+    State state;
+    int growthPoints;
 
     public Animal() {
 
@@ -31,5 +34,18 @@ public abstract class Animal {
 
     public void setImage(Image image) {
         this.image = image;
+    }
+
+    public void setState(State state){
+        this.state=state;
+    }
+    public State getState(){
+        return state;
+    }
+    public void setGrowthPoints(int growthPoints){
+        this.growthPoints=growthPoints;
+    }
+    public int getGrowthPoints(){
+        return growthPoints;
     }
 }
