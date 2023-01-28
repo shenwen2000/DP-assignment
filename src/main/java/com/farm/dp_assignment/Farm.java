@@ -56,8 +56,8 @@ public class Farm {
 
         Image backgroundImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/background_image.jpg")));
         ImageView backgroundImageView = new ImageView(backgroundImage);
-        backgroundImageView.setFitHeight(bounds.getHeight() - 1000);
-        backgroundImageView.setFitWidth(bounds.getWidth() - 1000);
+        backgroundImageView.setFitHeight(bounds.getHeight() - 100);
+        backgroundImageView.setFitWidth(bounds.getWidth() - 100);
         backgroundImageView.setPreserveRatio(true);
         content.getChildren().addAll(backgroundImageView, startButton);
         content.setAlignment(Pos.CENTER);
@@ -78,14 +78,13 @@ public class Farm {
                         new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/farm.jpg"))),
                         BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
                         new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true),
-                        new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true)
+                        new BackgroundSize(BackgroundSize.AUTO, bounds.getHeight() - 100, true, true, false, true)
                 )));
 
-        farmLayout.setPrefWidth(bounds.getWidth());
-        farmLayout.setPrefHeight(bounds.getHeight());
+        farmLayout.setPrefWidth(bounds.getWidth() - 150);
+        farmLayout.setPrefHeight(bounds.getHeight() - 1500);
 
         // set up top side
-//        Flow
         BorderPane topSec = new BorderPane();
         topSec.setPadding(new Insets(5, 5, 5, 5));
 
@@ -135,7 +134,7 @@ public class Farm {
         coinBox.setAlignment(Pos.BASELINE_RIGHT);
         coinBox.setMaxWidth(400);
         coinBox.setMaxHeight(100);
-        coinBox.setPadding(new Insets(5, 5, 5, 5));
+        coinBox.setPadding(new Insets(5, 5, 15, 5));
 
         topSec.setLeft(growthProgressBox);
         topSec.setRight(coinBox);
@@ -151,7 +150,8 @@ public class Farm {
         shopImageView.setFitWidth(80);
         shopButton.setPrefSize(80, 80);
         shopButton.setGraphic(shopImageView);
-        shopButton.setStyle("-fx-cursor: hand;-fx-margin-top:20px");
+        shopButton.setStyle("-fx-cursor: hand;");
+        shopButton.setAlignment(Pos.CENTER);
 
         Shop shop = new Shop();
 
