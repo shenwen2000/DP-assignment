@@ -24,8 +24,9 @@ public class MenuItem extends MenuComponent {
     Image image;
     String type;
 
-    final String IDLE_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #000000; -fx-border-radius: 2px; -fx-text-fill: black";
-    final String HOVERED_BUTTON_STYLE = "-fx-background-color: black; -fx-border-color: #000000; -fx-text-fill: white";
+    final String IDLE_BUTTON_STYLE = "-fx-background-color: #676AC2; -fx-border-color: #676AC2; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
+    final String HOVERED_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #676AC2; -fx-text-fill: #676AC2; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
+    final String IDLE_CANCEL_STYLE = "-fx-background-color: transparent; fx-cursor: hand;  -fx-text-fill: #676AC2; -fx-border-bottom-color: #676AC2; -fx-cursor: hand; -fx-font-weight: bold";
 
     public MenuItem(String name, boolean isLocked, int price, Image image, String type) {
         this.name = name;
@@ -88,11 +89,10 @@ public class MenuItem extends MenuComponent {
         ImageView imageView = new ImageView(getImage());
         imageView.setFitWidth(50);
         imageView.setFitHeight(50);
-//        imageView.setStyle("-fx-cursor: hand;");
 
         Button itemButton = new Button();
         itemButton.setPrefSize(50, 50);
-        itemButton.setStyle("-fx-background-color:transparent; -fx-border:none; -fx-cursor: hand;");
+        itemButton.setStyle("-fx-border:none; -fx-cursor: hand;");
 
         if (getLocked()) {
             itemButton.setTooltip(new Tooltip(getName() + " is locked"));
@@ -110,7 +110,7 @@ public class MenuItem extends MenuComponent {
 
         Text price;
         if (getName().equals("Premium food")) {
-            price = new Text("Will according to ingredient(s) added");
+            price = new Text("5");
         } else {
             price = new Text((getPrice() == 0 ? "Free" : String.valueOf(getPrice())));
         }
@@ -165,7 +165,12 @@ public class MenuItem extends MenuComponent {
         flowPane.setHgap(12);
 
         Button confirmButton = new Button("Confirm");
+        confirmButton.setStyle(IDLE_BUTTON_STYLE);
+        confirmButton.setOnMouseEntered(e -> confirmButton.setStyle(HOVERED_BUTTON_STYLE));
+        confirmButton.setOnMouseExited(e -> confirmButton.setStyle(IDLE_BUTTON_STYLE));
+
         Button cancelButton = new Button("Cancel");
+        cancelButton.setStyle(IDLE_CANCEL_STYLE);
 
         // Get the wallet amount and check enuf or not, then unlock
         confirmButton.setOnAction(e -> {
@@ -223,8 +228,6 @@ public class MenuItem extends MenuComponent {
         alertLayout.setAlignment(alertMsg, Pos.CENTER);
 
         Button okayBtn = new Button("Okay");
-        okayBtn.setStyle("-fx-background:transparent; -fx-border:none; -fx-cursor: hand; -fx-button-");
-
         okayBtn.setStyle(IDLE_BUTTON_STYLE);
         okayBtn.setOnMouseEntered(e -> okayBtn.setStyle(HOVERED_BUTTON_STYLE));
         okayBtn.setOnMouseExited(e -> okayBtn.setStyle(IDLE_BUTTON_STYLE));
