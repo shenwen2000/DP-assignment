@@ -146,6 +146,42 @@ public class Farm {
         farmLayout.setTop(topSec);
         farmLayout.setAlignment(topSec, Pos.BOTTOM_LEFT);
 
+
+        // set up Action button
+
+        //Idle
+        Button idleButton = new Button();
+        Image idleImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/donald_duck_idle.png")));
+        ImageView idleImageView = new ImageView(idleImage);
+        idleImageView.setFitHeight(80);
+        idleImageView.setFitWidth(80);
+        idleButton.setPrefSize(80, 80);
+        idleButton.setGraphic(idleImageView);
+        idleButton.setStyle("-fx-cursor: hand;");
+        idleButton.setTooltip(new Tooltip("Set movement of animal to idle."));
+
+        // move
+        Button moveButton = new Button();
+        Image movementImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/donald_duck_move.gif")));
+        ImageView movementImageView = new ImageView(movementImage);
+        movementImageView.setFitHeight(80);
+        movementImageView.setFitWidth(80);
+        moveButton.setPrefSize(80, 80);
+        moveButton.setGraphic(movementImageView);
+        moveButton.setStyle("-fx-cursor: hand;");
+        moveButton.setTooltip(new Tooltip("Set movement of animal to move."));
+
+        // Sleep
+        Button sleepButton = new Button();
+        Image sleepImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/donald_duck_sleep.gif")));
+        ImageView sleepImageView = new ImageView(sleepImage);
+        sleepImageView.setFitHeight(80);
+        sleepImageView.setFitWidth(80);
+        sleepButton.setPrefSize(80, 80);
+        sleepButton.setGraphic(sleepImageView);
+        sleepButton.setStyle("-fx-cursor: hand;");
+        sleepButton.setTooltip(new Tooltip("Set movement of animal to sleep."));
+
         //Set up shop
         Button shopButton = new Button();
         Image shopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/shop.png")));
@@ -157,23 +193,18 @@ public class Farm {
         shopButton.setStyle("-fx-cursor: hand; -fx-background-color: transparent;");
         shopButton.setAlignment(Pos.CENTER);
 
+
         Shop shop = new Shop();
 
         shopButton.setOnAction(e -> {
             shop.printMenu();
         });
 
-        farmLayout.setBottom(shopButton);
-        farmLayout.setAlignment(shopButton, Pos.BASELINE_LEFT);
+        HBox bottomMenu = new HBox(10);
+        bottomMenu.getChildren().addAll(shopButton, idleButton, moveButton, sleepButton);
 
-        Button shopButton1 = new Button();
-        Image shopImage1 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/shop.png")));
-        ImageView shopImageView1 = new ImageView(shopImage1);
-        shopImageView.setFitHeight(80);
-        shopImageView.setFitWidth(80);
-        shopButton1.setPrefSize(80, 80);
-        shopButton1.setGraphic(shopImageView1);
-        shopButton1.setStyle("-fx-cursor: hand;");
+        farmLayout.setBottom(bottomMenu);
+        farmLayout.setAlignment(bottomMenu, Pos.BASELINE_LEFT);
 
         if (!Objects.isNull(animal)) {
             ImageView animalImageView = new ImageView(animal.getImage());
@@ -200,10 +231,14 @@ public class Farm {
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Add Ingredient(s)");
 
-        GridPane ingredientPageLayout = new GridPane();
+        BorderPane ingredientPageLayout = new BorderPane();
         ingredientPageLayout.setPadding(new Insets(10, 10, 10, 10));
-        ingredientPageLayout.setVgap(8);
-        ingredientPageLayout.setHgap(10);
+
+
+        FlowPane content = new FlowPane();
+        content.setPadding(new Insets(10, 10, 10, 10));
+        content.setVgap(8);
+        content.setHgap(12);
 
         VBox ingredientSec = new VBox(10);
 
@@ -221,7 +256,7 @@ public class Farm {
         proteinButton.setPrefSize(100, 100);
         proteinImageView.setFitWidth(100);
         proteinImageView.setFitHeight(100);
-        proteinButton.setStyle("-fx-cursor: hand; -fx-background-color: transparent;");
+        proteinButton.setStyle("-fx-cursor: hand;");
 
         // create vitamin button
         Button vitaminButton = new Button();
@@ -231,9 +266,9 @@ public class Farm {
         vitaminButton.setPrefSize(100, 100);
         vitaminImageView.setFitWidth(100);
         vitaminImageView.setFitHeight(100);
-        vitaminButton.setStyle("-fx-cursor: hand; -fx-background-color: transparent;");
+        vitaminButton.setStyle("-fx-cursor: hand;");
 
-        ingredientSec.getChildren().addAll(titleText, proteinButton, vitaminButton);
+        ingredientSec.getChildren().addAll(proteinButton, vitaminButton);
 
         VBox ingredientPriceList = new VBox(10);
         Text ingredientListText = new Text("Added Ingredient List");
@@ -251,9 +286,7 @@ public class Farm {
         titleText.setTextAlignment(TextAlignment.LEFT);
 
         ingredientPriceList.getChildren().addAll(ingredientListText, lineBreak1, priceText);
-
-        GridPane.setConstraints(ingredientSec, 0, 0);
-        GridPane.setConstraints(ingredientPriceList, 1, 0);
+        content.getChildren().addAll(ingredientSec, ingredientPriceList);
 
         Button confirmBtn = new Button("Confirm");
         confirmBtn.setStyle(IDLE_BUTTON_STYLE);
@@ -264,8 +297,13 @@ public class Farm {
             // set the action at here
             window.close();
         });
-        GridPane.setConstraints(confirmBtn, 1, 1);
-        ingredientPageLayout.getChildren().addAll(ingredientSec, ingredientPriceList, confirmBtn);
+
+        ingredientPageLayout.setTop(titleText);
+        ingredientPageLayout.setAlignment(titleText, Pos.BOTTOM_LEFT);
+
+        ingredientPageLayout.setCenter(content);
+        ingredientPageLayout.setBottom(confirmBtn);
+        ingredientPageLayout.setAlignment(confirmBtn, Pos.BASELINE_RIGHT);
 
         Scene scene = new Scene(ingredientPageLayout);
         window.setScene(scene);

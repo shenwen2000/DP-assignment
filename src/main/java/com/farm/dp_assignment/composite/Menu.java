@@ -65,8 +65,8 @@ public class Menu extends MenuComponent {
         shopBox.setHgap(4);
 
         ImageView imageView = new ImageView(getImage());
-        imageView.setFitHeight(60);
-        imageView.setFitWidth(80);
+        imageView.setFitHeight(getType().equals("All") ? 40 : 60);
+        imageView.setFitWidth(getType().equals("All") ? 60 : 80);
 
         Text nameType = new Text(getName());
         nameType.setStyle("-fx-font-size: 25px; -fx-font-vertical-align:top");

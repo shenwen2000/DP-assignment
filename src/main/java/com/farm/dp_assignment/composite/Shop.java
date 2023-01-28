@@ -27,15 +27,10 @@ public class Shop {
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Shop");
         window.setMaxWidth(600);
-        window.setMinHeight(800);
-
-        Label title = new Label("All menus");
-        title.setStyle("-fx-font-size: 25px; -fx-font-weight: bold");
+        window.setMinHeight(700);
 
         BorderPane shopLayout = new BorderPane();
         shopLayout.setPadding(new Insets(10, 10, 10, 10));
-        shopLayout.setTop(title);
-        shopLayout.setAlignment(title, Pos.CENTER);
 
         VBox vBox = new VBox(10);
 
