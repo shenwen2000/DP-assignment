@@ -234,7 +234,6 @@ public class Farm {
         BorderPane ingredientPageLayout = new BorderPane();
         ingredientPageLayout.setPadding(new Insets(10, 10, 10, 10));
 
-
         FlowPane content = new FlowPane();
         content.setPadding(new Insets(10, 10, 10, 10));
         content.setVgap(8);
@@ -272,18 +271,19 @@ public class Farm {
 
         VBox ingredientPriceList = new VBox(10);
         Text ingredientListText = new Text("Added Ingredient List");
+        ingredientListText.setStyle("-fx-font-size: 15px; -fx-font-weight: bold");
         titleText.setBoundsType(TextBoundsType.VISUAL);
         titleText.setTextAlignment(TextAlignment.LEFT);
 
         Text lineBreak1 = new Text("------------------------------");
-        lineBreak1.setStyle("-fx-font-size: 10px; -fx-font-weight: bold");
+        lineBreak1.setStyle("-fx-font-size: 12px; -fx-font-weight: bold");
         lineBreak1.setBoundsType(TextBoundsType.VISUAL);
         lineBreak1.setTextAlignment(TextAlignment.LEFT);
 
-        Text priceText = new Text("Price:");
-        titleText.setStyle("-fx-font-size: 12px; -fx-font-weight: bold");
-        titleText.setBoundsType(TextBoundsType.VISUAL);
-        titleText.setTextAlignment(TextAlignment.LEFT);
+        Text priceText = new Text("Price:5");
+        priceText.setStyle("-fx-font-size: 15px; -fx-font-weight: bold");
+        priceText.setBoundsType(TextBoundsType.VISUAL);
+        priceText.setTextAlignment(TextAlignment.LEFT);
 
         ingredientPriceList.getChildren().addAll(ingredientListText, lineBreak1, priceText);
         content.getChildren().addAll(ingredientSec, ingredientPriceList);

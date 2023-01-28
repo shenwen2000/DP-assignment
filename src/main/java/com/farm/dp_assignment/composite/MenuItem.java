@@ -110,7 +110,7 @@ public class MenuItem extends MenuComponent {
 
         Text price;
         if (getName().equals("Premium food")) {
-            price = new Text("Will according to ingredient(s) added");
+            price = new Text("5");
         } else {
             price = new Text((getPrice() == 0 ? "Free" : String.valueOf(getPrice())));
         }
