@@ -150,7 +150,7 @@ public class Farm {
         shopImageView.setFitWidth(80);
         shopButton.setPrefSize(80, 80);
         shopButton.setGraphic(shopImageView);
-        shopButton.setStyle("-fx-cursor: hand;");
+        shopButton.setStyle("-fx-cursor: hand; -fx-background-color: transparent;");
         shopButton.setAlignment(Pos.CENTER);
 
         Shop shop = new Shop();

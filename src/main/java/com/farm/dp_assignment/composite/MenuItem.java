@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -16,11 +17,15 @@ import javafx.stage.Stage;
 import java.util.Objects;
 
 public class MenuItem extends MenuComponent {
+
     String name;
     Boolean isLocked;
     int price;
     Image image;
     String type;
+
+    final String IDLE_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #000000; -fx-border-radius: 2px; -fx-text-fill: black";
+    final String HOVERED_BUTTON_STYLE = "-fx-background-color: black; -fx-border-color: #000000; -fx-text-fill: white";
 
     public MenuItem(String name, boolean isLocked, int price, Image image, String type) {
         this.name = name;
@@ -87,7 +92,12 @@ public class MenuItem extends MenuComponent {
 
         Button itemButton = new Button();
         itemButton.setPrefSize(50, 50);
-        itemButton.setStyle("-fx-background:transparent; -fx-border:none; -fx-cursor: hand;");
+        itemButton.setStyle("-fx-background-color:transparent; -fx-border:none; -fx-cursor: hand;");
+
+        if (getLocked()) {
+            itemButton.setTooltip(new Tooltip(getName() + " is locked"));
+        }
+
         itemButton.setGraphic(imageView);
 
         itemButton.setOnAction(e -> {
@@ -131,6 +141,7 @@ public class MenuItem extends MenuComponent {
     private void setUnlockPage() {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
+
         if (getLocked()) {
             window.setTitle("Unlock " + getName());
         } else {
@@ -160,8 +171,16 @@ public class MenuItem extends MenuComponent {
         confirmButton.setOnAction(e -> {
             // if enuf then create a animal for him
             if (getType().equals("Animal")) {
-                Farm farm = new Farm();
-                farm.createAnimal(getName());
+                if (getLocked()) {
+                    // checking money enuf to unlock the animal
+                    // if enuf set lock to unlock
+                    //else
+                    setAlertMsg(getLocked() ? "Unlock" : "Buy", getType());
+                } else {
+                    // same here, need to check the amount 1st
+                    Farm farm = new Farm();
+                    farm.createAnimal(getName());
+                }
             } else {
                 if (getName().equals("Premium food")) {
                     Farm farm = new Farm();
@@ -183,6 +202,41 @@ public class MenuItem extends MenuComponent {
         farmLayout.setAlignment(content, Pos.TOP_LEFT);
 
         Scene scene = new Scene(farmLayout);
+        window.setScene(scene);
+        window.showAndWait();
+    }
+
+    private void setAlertMsg(String actionType, String type) {
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setMaxWidth(550);
+        window.setMinHeight(150);
+        window.setTitle("Alert");
+
+        Text alertMsg = new Text("Not have enough money to " + actionType + " this " + type);
+        alertMsg.setStyle("-fx-font-size: 15px; -fx-font-vertical-align:top");
+        alertMsg.setBoundsType(TextBoundsType.VISUAL);
+
+        BorderPane alertLayout = new BorderPane();
+        alertLayout.setPadding(new Insets(10, 10, 10, 10));
+        alertLayout.setCenter(alertMsg);
+        alertLayout.setAlignment(alertMsg, Pos.CENTER);
+
+        Button okayBtn = new Button("Okay");
+        okayBtn.setStyle("-fx-background:transparent; -fx-border:none; -fx-cursor: hand; -fx-button-");
+
+        okayBtn.setStyle(IDLE_BUTTON_STYLE);
+        okayBtn.setOnMouseEntered(e -> okayBtn.setStyle(HOVERED_BUTTON_STYLE));
+        okayBtn.setOnMouseExited(e -> okayBtn.setStyle(IDLE_BUTTON_STYLE));
+
+        okayBtn.setOnAction(e -> {
+            window.close();
+        });
+
+        alertLayout.setRight(okayBtn);
+        alertLayout.setAlignment(okayBtn, Pos.BOTTOM_RIGHT);
+
+        Scene scene = new Scene(alertLayout);
         window.setScene(scene);
         window.showAndWait();
     }
