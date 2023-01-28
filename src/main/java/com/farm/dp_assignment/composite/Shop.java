@@ -50,13 +50,14 @@ public class Shop {
     }
 
     private void createMenuList() {
+        Image allMenusImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/hamburger.png")));
         Image animalShopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/pet_shop.png")));
         Image feedShopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/feed.png")));
 
         animalMenu = new Menu("Animal Shop", animalShopImage, "Animal");
         foodMenu = new Menu("Food Menu", feedShopImage, "Food");
 
-        allMenus = new Menu("Menus", null, "All");
+        allMenus = new Menu("Menus", allMenusImage, "All");
         allMenus.add(animalMenu);
         allMenus.add(foodMenu);
     }

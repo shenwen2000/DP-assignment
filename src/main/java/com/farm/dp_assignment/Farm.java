@@ -30,14 +30,18 @@ public class Farm {
     SimpleAnimalFactory factory = new SimpleAnimalFactory();
     Animal animal = null;
 
+    final String IDLE_BUTTON_STYLE = "-fx-background-color: #676AC2; -fx-border-color: #676AC2; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
+    final String HOVERED_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #676AC2; -fx-text-fill: #676AC2; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
+
     public void setUpStartingPage(Stage primaryStage) {
         this.startingScene = primaryStage;
         startingScene.setTitle("Animal Farm");
 
         startButton = new Button("Start");
         startButton.setMinWidth(200);
-        startButton.setStyle("-fx-background-color: #676AC2; -fx-text-fill: #FFFFFF; -fx-border-radius: 25; " +
-                "-fx-cursor: hand;");
+        startButton.setStyle(IDLE_BUTTON_STYLE);
+        startButton.setOnMouseEntered(e -> startButton.setStyle(HOVERED_BUTTON_STYLE));
+        startButton.setOnMouseExited(e -> startButton.setStyle(IDLE_BUTTON_STYLE));
 
         startButton.setOnAction(e -> {
             this.startingScene.setScene(setUpFarmPage());
@@ -194,82 +198,74 @@ public class Farm {
     public void setAddIngredientPage() {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
+        window.setTitle("Add Ingredient(s)");
 
-        BorderPane ingredientPageLayout = new BorderPane();
+        GridPane ingredientPageLayout = new GridPane();
         ingredientPageLayout.setPadding(new Insets(10, 10, 10, 10));
+        ingredientPageLayout.setVgap(8);
+        ingredientPageLayout.setHgap(10);
 
-        // Protein Part
-        VBox proteinBox = new VBox(10);
+        VBox ingredientSec = new VBox(10);
 
+        // Create title text
+        Text titleText = new Text("Press the image to add ingredient");
+        titleText.setStyle("-fx-font-size: 12px; -fx-font-weight: bold");
+        titleText.setBoundsType(TextBoundsType.VISUAL);
+        titleText.setTextAlignment(TextAlignment.LEFT);
+
+        // create protein button
+        Button proteinButton = new Button();
         Image proteinImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/protein.png")));
         ImageView proteinImageView = new ImageView(proteinImg);
-        proteinImageView.setFitWidth(500);
-        proteinImageView.setFitHeight(400);
+        proteinButton.setGraphic(proteinImageView);
+        proteinButton.setPrefSize(100, 100);
+        proteinImageView.setFitWidth(100);
+        proteinImageView.setFitHeight(100);
+        proteinButton.setStyle("-fx-cursor: hand; -fx-background-color: transparent;");
 
-        Text proteinText = new Text("Protein");
-        proteinText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold");
-        proteinText.setBoundsType(TextBoundsType.VISUAL);
-        proteinText.setTextAlignment(TextAlignment.CENTER);
-
-        Label potionText1 = new Label("Potion");
-        TextField proteinTxtField = new TextField();
-
-        GridPane proteinInputBox = new GridPane();
-        proteinInputBox.addRow(0, potionText1, proteinTxtField);
-        proteinInputBox.setAlignment(Pos.CENTER);
-
-        proteinBox.getChildren().addAll(proteinImageView, proteinText, proteinInputBox);
-
-        // Vitamin Part
-        VBox vitaminBox = new VBox(10);
-
+        // create vitamin button
+        Button vitaminButton = new Button();
         Image vitaminImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/vitamin.png")));
         ImageView vitaminImageView = new ImageView(vitaminImg);
-        vitaminImageView.setFitWidth(500);
-        vitaminImageView.setFitHeight(400);
+        vitaminButton.setGraphic(vitaminImageView);
+        vitaminButton.setPrefSize(100, 100);
+        vitaminImageView.setFitWidth(100);
+        vitaminImageView.setFitHeight(100);
+        vitaminButton.setStyle("-fx-cursor: hand; -fx-background-color: transparent;");
 
-        Text vitaminText = new Text("Vitamin");
-        vitaminText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold");
-        vitaminText.setBoundsType(TextBoundsType.VISUAL);
-        vitaminText.setTextAlignment(TextAlignment.CENTER);
+        ingredientSec.getChildren().addAll(titleText, proteinButton, vitaminButton);
 
-        Label potionText2 = new Label("Potion");
-        TextField vitaminTxtField = new TextField();
+        VBox ingredientPriceList = new VBox(10);
+        Text ingredientListText = new Text("Added Ingredient List");
+        titleText.setBoundsType(TextBoundsType.VISUAL);
+        titleText.setTextAlignment(TextAlignment.LEFT);
 
-        GridPane vitaminInputBox = new GridPane();
-        vitaminInputBox.addRow(0, potionText2, vitaminTxtField);
-        vitaminInputBox.setAlignment(Pos.CENTER);
+        Text lineBreak1 = new Text("------------------------------");
+        lineBreak1.setStyle("-fx-font-size: 10px; -fx-font-weight: bold");
+        lineBreak1.setBoundsType(TextBoundsType.VISUAL);
+        lineBreak1.setTextAlignment(TextAlignment.LEFT);
 
-        vitaminBox.getChildren().addAll(vitaminImageView, vitaminText, vitaminInputBox);
+        Text priceText = new Text("Price:");
+        titleText.setStyle("-fx-font-size: 12px; -fx-font-weight: bold");
+        titleText.setBoundsType(TextBoundsType.VISUAL);
+        titleText.setTextAlignment(TextAlignment.LEFT);
 
-        GridPane content = new GridPane();
-        content.setPadding(new Insets(10, 20, 10, 20));
-        content.addRow(0, proteinBox, vitaminBox);
+        ingredientPriceList.getChildren().addAll(ingredientListText, lineBreak1, priceText);
 
-        ingredientPageLayout.setCenter(content);
-        ingredientPageLayout.setAlignment(content, Pos.CENTER);
-
-        Button addBtn = new Button("Add Ingredient");
-        addBtn.setStyle("-fx-padding: 10px;-fx-border-insets: 5px;-fx-background-insets: 5px;-fx-border:2px black");
-
-        addBtn.setOnAction(e -> {
-
-        });
+        GridPane.setConstraints(ingredientSec, 0, 0);
+        GridPane.setConstraints(ingredientPriceList, 1, 0);
 
         Button confirmBtn = new Button("Confirm");
-        confirmBtn.setStyle("-fx-padding: 10px;-fx-border-insets: 5px;-fx-background-insets: 5px;-fx-border:2px black");
-
+        confirmBtn.setStyle(IDLE_BUTTON_STYLE);
+        confirmBtn.setOnMouseEntered(e -> confirmBtn.setStyle(HOVERED_BUTTON_STYLE));
+        confirmBtn.setOnMouseExited(e -> confirmBtn.setStyle(IDLE_BUTTON_STYLE));
+        confirmBtn.setAlignment(Pos.BASELINE_RIGHT);
         confirmBtn.setOnAction(e -> {
+            // set the action at here
             window.close();
         });
-
-        GridPane buttonBox = new GridPane();
-        buttonBox.setPadding(new Insets(30, 20, 10, 20));
-        buttonBox.addRow(0, addBtn, confirmBtn);
-        buttonBox.setAlignment(Pos.BOTTOM_RIGHT);
-
-        ingredientPageLayout.setBottom(buttonBox);
-        ingredientPageLayout.setAlignment(buttonBox, Pos.BOTTOM_RIGHT);
+        GridPane.setConstraints(confirmBtn, 1, 1);
+        ingredientPageLayout.getChildren().addAll(ingredientSec, ingredientPriceList, confirmBtn);
 
         Scene scene = new Scene(ingredientPageLayout);
         window.setScene(scene);
