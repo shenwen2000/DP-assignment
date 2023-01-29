@@ -1,26 +1,23 @@
 package com.farm.dp_assignment.strategy;
 
 import javafx.animation.TranslateTransition;
-import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-
-public class MoveOnGround implements MoveBehavior {
-
+public class Idle implements MoveBehavior {
     @Override
     public void move(ImageView imageView) {
         //Instantiating TranslateTransition class
         TranslateTransition translate = new TranslateTransition();
 
-        //shifting the X coordinate of the centre of the circle by 400
-        translate.setByX(-1200);
+
+        translate.setByY(50);
 
         //setting the duration for the Translate transition
-        translate.setDuration(Duration.millis(6000));
+        translate.setDuration(Duration.millis(3000));
 
         //setting cycle count for the Translate transition
-        translate.setCycleCount(10);
+        translate.setCycleCount(5);
 
         //the transition will set to be auto reversed by setting this to true
         translate.setAutoReverse(true);
@@ -30,6 +27,5 @@ public class MoveOnGround implements MoveBehavior {
 
         //playing the transition
         translate.play();
-
     }
 }

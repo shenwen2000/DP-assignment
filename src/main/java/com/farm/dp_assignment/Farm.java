@@ -2,6 +2,8 @@ package com.farm.dp_assignment;
 
 import com.farm.dp_assignment.composite.Shop;
 import com.farm.dp_assignment.simpleFactory.SimpleAnimalFactory;
+import com.farm.dp_assignment.strategy.Chicken;
+import com.farm.dp_assignment.strategy.MoveOnGround;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -156,6 +158,17 @@ public class Farm {
         shopButton1.setPrefSize(80, 80);
         shopButton1.setGraphic(shopImageView1);
         shopButton1.setStyle("-fx-cursor: hand;");
+
+        Button mvOnGrd = new Button("Move On Ground");
+        mvOnGrd.setStyle("-fx-padding: 10px;-fx-border-insets: 5px;-fx-background-insets: 5px;-fx-border:2px black");
+        mvOnGrd.setStyle("-fx-cursor: hand;");
+
+        farmLayout.setCenter(mvOnGrd);
+        farmLayout.setAlignment(mvOnGrd, Pos.BOTTOM_RIGHT);
+
+//        mvOnGrd.setOnAction(e -> {
+//            animal.setMoveBehavior(new MoveOnGround());
+//        });
 
         if (!Objects.isNull(animal)) {
             ImageView animalImageView = new ImageView(animal.getImage());
