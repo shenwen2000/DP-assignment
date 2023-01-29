@@ -44,6 +44,8 @@ public class Farm {
 
     public static Shop shop;
 
+    private SingletonWallet wallet;
+
     public void setUpStartingPage(Stage primaryStage) {
         this.startingScene = primaryStage;
         startingScene.setTitle("Animal Farm");
@@ -141,7 +143,7 @@ public class Farm {
         WalletFactory walletFactory = new WalletFactory();
 
         // Singleton wallet
-        SingletonWallet wallet = walletFactory.getWallet();
+        wallet = walletFactory.getWallet();
         int totalCoin = wallet.getTotalAmount();
 
         String totalCoinStr = Integer.toString(totalCoin);
@@ -162,7 +164,6 @@ public class Farm {
 
         farmLayout.setTop(topSec);
         farmLayout.setAlignment(topSec, Pos.BOTTOM_LEFT);
-
 
         // Set up action button
         //Idle
@@ -198,17 +199,15 @@ public class Farm {
         sleepButton.setStyle("-fx-cursor: hand;");
         sleepButton.setTooltip(new Tooltip("Set movement of animal to sleep."));
 
-        if (sleepButton.isPressed()){
+        if (sleepButton.isPressed()) {
             sleepButton.setOnAction(e -> {
                 this.animal.setMoveBehavior(new Sleeping());
             });
-        }
-        else if (idleButton.isPressed()){
+        } else if (idleButton.isPressed()) {
             idleButton.setOnAction(e -> {
                 this.animal.setMoveBehavior(new Idle());
             });
-        }
-        else if (moveButton.isPressed()){
+        } else if (moveButton.isPressed()) {
             moveButton.setOnAction(e -> {
                 this.animal.setMoveBehavior(new MoveOnGround());
             });
