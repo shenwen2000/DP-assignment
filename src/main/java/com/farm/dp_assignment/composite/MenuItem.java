@@ -193,10 +193,6 @@ public class MenuItem extends MenuComponent {
 
                         Farm.shop.shopLayout.setCenter(vBox);
                         Farm.shop.shopLayout.setAlignment(vBox, Pos.TOP_LEFT);
-
-                        // refresh page
-                        Farm farm = new Farm();
-                        farm.refreshFarmPage();
                     } else {
                         setAlertMsg(getLocked() ? "Unlock" : "Buy", getType());
                     }
