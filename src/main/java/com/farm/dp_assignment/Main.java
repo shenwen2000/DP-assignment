@@ -20,9 +20,5 @@ public class Main extends Application {
         this.primaryStage = primaryStage;
         Farm farm = new Farm();
         farm.setUpStartingPage(this.primaryStage);
-
-        //for wallet testing only, can delete it before submit
-//        WalletFactory wal = new WalletFactory();
-//        wal.withdraw(5);
     }
 }

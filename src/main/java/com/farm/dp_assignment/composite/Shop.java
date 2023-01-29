@@ -20,10 +20,21 @@ public class Shop {
 
     public static BorderPane shopLayout;
 
+    private static Shop uniqueShop = new Shop();
+
+    private Shop() {
+    }
+
+    public static Shop getShop() {
+        return uniqueShop;
+    }
+
     public void printMenu() {
-        this.createMenuList();
-        this.createAnimalMenuItemList(animalMenu);
-        this.createFoodMenuItemList(foodMenu);
+        if (Objects.isNull(allMenus)) {
+            this.createMenuList();
+            this.createAnimalMenuItemList(animalMenu);
+            this.createFoodMenuItemList(foodMenu);
+        }
 
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);

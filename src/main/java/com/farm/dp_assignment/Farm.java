@@ -3,6 +3,7 @@ package com.farm.dp_assignment;
 import com.farm.dp_assignment.composite.Shop;
 import com.farm.dp_assignment.decorator.*;
 import com.farm.dp_assignment.simpleFactory.SimpleAnimalFactory;
+import com.farm.dp_assignment.singleton.SingletonWallet;
 import com.farm.dp_assignment.singleton.WalletFactory;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -27,7 +28,7 @@ import java.util.Objects;
 
 public class Farm {
 
-    Stage startingScene, farmScene;
+    Stage startingScene;
     Button startButton;
     SimpleAnimalFactory factory = new SimpleAnimalFactory();
     Animal animal = null;
@@ -58,7 +59,6 @@ public class Farm {
 
         VBox content = new VBox(15);
         Scene scene = new Scene(content, bounds.getWidth(), bounds.getHeight());
-//        scene.getStylesheets().addAll(this.getClass().getResource("css/style.css").toExternalForm());
 
         startingScene.setScene(scene);
         startingScene.setX(bounds.getMinX());
@@ -135,15 +135,17 @@ public class Farm {
         HBox coinBox = new HBox(5);
 
         //WalletFactory
-        WalletFactory wallet = new WalletFactory();
-        int totalCoin = wallet.getWalletAmount();
+        WalletFactory walletFactory = new WalletFactory();
+
+        // Singleton wallet
+        SingletonWallet wallet = walletFactory.getWallet();
+        int totalCoin = wallet.getTotalAmount();
 
         String totalCoinStr = Integer.toString(totalCoin);
         Text totalCoinText = new Text(totalCoinStr);
         totalCoinText.setStyle("-fx-font-size: 25px; -fx-font-vertical-align:top");
         totalCoinText.setBoundsType(TextBoundsType.VISUAL);
 
-        // After getting the amount of coin, pls add it at below sentence exp: (coinImageView, Amount)
         coinBox.getChildren().addAll(coinImageView, totalCoinText);
 
         coinBox.setStyle("-fx-border-color: #000000; -fx-border-radius: 5px;");
@@ -159,8 +161,7 @@ public class Farm {
         farmLayout.setAlignment(topSec, Pos.BOTTOM_LEFT);
 
 
-        // set up Action button
-
+        // Set up action button
         //Idle
         Button idleButton = new Button();
         Image idleImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/donald_duck_idle.png")));
@@ -205,7 +206,7 @@ public class Farm {
         shopButton.setStyle("-fx-cursor: hand; -fx-background-color: transparent;");
         shopButton.setAlignment(Pos.CENTER);
 
-        shop = new Shop();
+        shop = Shop.getShop();
 
         shopButton.setOnAction(e -> {
             shop.printMenu();
@@ -233,8 +234,7 @@ public class Farm {
 
     public void createAnimal(String nameType) {
         animal = factory.createAnimal(nameType);
-        this.startingScene = Main.primaryStage;
-        this.startingScene.setScene(setUpFarmPage());
+        refreshFarmPage();
     }
 
     public void setAddIngredientPage() {
@@ -335,6 +335,10 @@ public class Farm {
         window.showAndWait();
     }
 
+    public void refreshFarmPage() {
+        this.startingScene = Main.primaryStage;
+        this.startingScene.setScene(setUpFarmPage());
+    }
 
     public Shop getShop() {
         return shop;
