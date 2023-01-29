@@ -5,6 +5,9 @@ import com.farm.dp_assignment.decorator.*;
 import com.farm.dp_assignment.simpleFactory.SimpleAnimalFactory;
 import com.farm.dp_assignment.singleton.SingletonWallet;
 import com.farm.dp_assignment.singleton.WalletFactory;
+import com.farm.dp_assignment.strategy.Idle;
+import com.farm.dp_assignment.strategy.MoveOnGround;
+import com.farm.dp_assignment.strategy.Sleeping;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -195,6 +198,21 @@ public class Farm {
         sleepButton.setStyle("-fx-cursor: hand;");
         sleepButton.setTooltip(new Tooltip("Set movement of animal to sleep."));
 
+        if (sleepButton.isPressed()){
+            sleepButton.setOnAction(e -> {
+                this.animal.setMoveBehavior(new Sleeping());
+            });
+        }
+        else if (idleButton.isPressed()){
+            idleButton.setOnAction(e -> {
+                this.animal.setMoveBehavior(new Idle());
+            });
+        }
+        else if (moveButton.isPressed()){
+            moveButton.setOnAction(e -> {
+                this.animal.setMoveBehavior(new MoveOnGround());
+            });
+        }
         //Set up shop
         Button shopButton = new Button();
         Image shopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/shop.png")));
