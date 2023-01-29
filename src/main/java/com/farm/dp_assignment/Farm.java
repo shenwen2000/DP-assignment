@@ -3,6 +3,7 @@ package com.farm.dp_assignment;
 import com.farm.dp_assignment.composite.Shop;
 import com.farm.dp_assignment.decorator.*;
 import com.farm.dp_assignment.simpleFactory.SimpleAnimalFactory;
+import com.farm.dp_assignment.singleton.WalletFactory;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -131,12 +132,21 @@ public class Farm {
 
         HBox coinBox = new HBox(5);
 
-        Text cointAmount = new Text("1000");
-        cointAmount.setStyle("-fx-font-size: 25px; -fx-font-vertical-align:top");
-        cointAmount.setBoundsType(TextBoundsType.VISUAL);
+//        Text cointAmount = new Text("1000");
+//        cointAmount.setStyle("-fx-font-size: 25px; -fx-font-vertical-align:top");
+//        cointAmount.setBoundsType(TextBoundsType.VISUAL);
+
+        //WalletFactory
+        WalletFactory wallet = new WalletFactory();
+        int totalCoin = wallet.getWalletAmount();
+
+        String totalCoinStr = Integer.toString(totalCoin);
+        Text totalCoinText = new Text(totalCoinStr);
+        totalCoinText.setStyle("-fx-font-size: 25px; -fx-font-vertical-align:top");
+        totalCoinText.setBoundsType(TextBoundsType.VISUAL);
 
         // After getting the amount of coin, pls add it at below sentence exp: (coinImageView, Amount)
-        coinBox.getChildren().addAll(coinImageView, cointAmount);
+        coinBox.getChildren().addAll(coinImageView, totalCoinText);
 
         coinBox.setStyle("-fx-border-color: #000000; -fx-border-radius: 5px;");
         coinBox.setAlignment(Pos.BASELINE_RIGHT);
