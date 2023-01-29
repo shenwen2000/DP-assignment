@@ -65,8 +65,8 @@ public class Menu extends MenuComponent {
         shopBox.setHgap(4);
 
         ImageView imageView = new ImageView(getImage());
-        imageView.setFitHeight(60);
-        imageView.setFitWidth(80);
+        imageView.setFitHeight(getType().equals("All") ? 40 : 60);
+        imageView.setFitWidth(getType().equals("All") ? 60 : 80);
 
         Text nameType = new Text(getName());
         nameType.setStyle("-fx-font-size: 25px; -fx-font-vertical-align:top");
@@ -88,27 +88,6 @@ public class Menu extends MenuComponent {
         }
 
         menuVbox.getChildren().addAll(shopBoxWithDashLine);
-
-//        TableColumn<MenuComponent, String> imageColumn = new TableColumn<>("Image");
-//        imageColumn.setPrefWidth(200);
-//        imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
-//
-//        TableColumn<MenuComponent, String> nameColumn = new TableColumn<>("Name");
-//        nameColumn.setPrefWidth(200);
-//        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-//
-//        TableColumn<MenuComponent, String> priceColumn = new TableColumn<>("Price");
-//        priceColumn.setPrefWidth(200);
-//        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-//
-//        TableColumn<MenuComponent, String> isLockColumn = new TableColumn<>("Locked");
-//        isLockColumn.setPrefWidth(200);
-//        isLockColumn.setCellValueFactory(new PropertyValueFactory<>("isLock"));
-//
-//        TableView<MenuComponent> table = new TableView<>();
-//        table.getColumns().addAll(imageColumn, nameColumn, priceColumn, isLockColumn);
-//
-//        menuVbox.getChildren().addAll(table);
 
         while (menuIterator.hasNext()) {
             MenuComponent menu = menuIterator.next();

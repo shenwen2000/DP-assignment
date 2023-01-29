@@ -1,5 +1,6 @@
 package com.farm.dp_assignment.strategy;
 
+import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
@@ -14,13 +15,13 @@ public class MoveOnGround implements MoveBehavior {
         TranslateTransition translate = new TranslateTransition();
 
         //shifting the X coordinate of the centre of the circle by 400
-        translate.setByX(-1200);
+        translate.setByX(-900);
 
         //setting the duration for the Translate transition
         translate.setDuration(Duration.millis(6000));
 
         //setting cycle count for the Translate transition
-        translate.setCycleCount(10);
+        translate.setCycleCount(Animation.INDEFINITE);
 
         //the transition will set to be auto reversed by setting this to true
         translate.setAutoReverse(true);

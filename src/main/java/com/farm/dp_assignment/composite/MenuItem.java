@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -16,11 +17,16 @@ import javafx.stage.Stage;
 import java.util.Objects;
 
 public class MenuItem extends MenuComponent {
+
     String name;
     Boolean isLocked;
     int price;
     Image image;
     String type;
+
+    final String IDLE_BUTTON_STYLE = "-fx-background-color: #676AC2; -fx-border-color: #676AC2; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
+    final String HOVERED_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #676AC2; -fx-text-fill: #676AC2; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
+    final String IDLE_CANCEL_STYLE = "-fx-background-color: transparent; fx-cursor: hand;  -fx-text-fill: #676AC2; -fx-border-bottom-color: #676AC2; -fx-cursor: hand; -fx-font-weight: bold";
 
     public MenuItem(String name, boolean isLocked, int price, Image image, String type) {
         this.name = name;
@@ -83,11 +89,15 @@ public class MenuItem extends MenuComponent {
         ImageView imageView = new ImageView(getImage());
         imageView.setFitWidth(50);
         imageView.setFitHeight(50);
-//        imageView.setStyle("-fx-cursor: hand;");
 
         Button itemButton = new Button();
         itemButton.setPrefSize(50, 50);
-        itemButton.setStyle("-fx-background:transparent; -fx-border:none; -fx-cursor: hand;");
+        itemButton.setStyle("-fx-border:none; -fx-cursor: hand;");
+
+        if (getLocked()) {
+            itemButton.setTooltip(new Tooltip(getName() + " is locked"));
+        }
+
         itemButton.setGraphic(imageView);
 
         itemButton.setOnAction(e -> {
@@ -100,7 +110,7 @@ public class MenuItem extends MenuComponent {
 
         Text price;
         if (getName().equals("Premium food")) {
-            price = new Text("Will according to ingredient(s) added");
+            price = new Text("5");
         } else {
             price = new Text((getPrice() == 0 ? "Free" : String.valueOf(getPrice())));
         }
@@ -131,6 +141,7 @@ public class MenuItem extends MenuComponent {
     private void setUnlockPage() {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
+
         if (getLocked()) {
             window.setTitle("Unlock " + getName());
         } else {
@@ -154,14 +165,27 @@ public class MenuItem extends MenuComponent {
         flowPane.setHgap(12);
 
         Button confirmButton = new Button("Confirm");
+        confirmButton.setStyle(IDLE_BUTTON_STYLE);
+        confirmButton.setOnMouseEntered(e -> confirmButton.setStyle(HOVERED_BUTTON_STYLE));
+        confirmButton.setOnMouseExited(e -> confirmButton.setStyle(IDLE_BUTTON_STYLE));
+
         Button cancelButton = new Button("Cancel");
+        cancelButton.setStyle(IDLE_CANCEL_STYLE);
 
         // Get the wallet amount and check enuf or not, then unlock
         confirmButton.setOnAction(e -> {
             // if enuf then create a animal for him
             if (getType().equals("Animal")) {
-                Farm farm = new Farm();
-                farm.createAnimal(getName());
+                if (getLocked()) {
+                    // checking money enuf to unlock the animal
+                    // if enuf set lock to unlock
+                    //else
+                    setAlertMsg(getLocked() ? "Unlock" : "Buy", getType());
+                } else {
+                    // same here, need to check the amount 1st
+                    Farm farm = new Farm();
+                    farm.createAnimal(getName());
+                }
             } else {
                 if (getName().equals("Premium food")) {
                     Farm farm = new Farm();
@@ -183,6 +207,39 @@ public class MenuItem extends MenuComponent {
         farmLayout.setAlignment(content, Pos.TOP_LEFT);
 
         Scene scene = new Scene(farmLayout);
+        window.setScene(scene);
+        window.showAndWait();
+    }
+
+    private void setAlertMsg(String actionType, String type) {
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setMaxWidth(550);
+        window.setMinHeight(150);
+        window.setTitle("Alert");
+
+        Text alertMsg = new Text("Not have enough money to " + actionType + " this " + type);
+        alertMsg.setStyle("-fx-font-size: 15px; -fx-font-vertical-align:top");
+        alertMsg.setBoundsType(TextBoundsType.VISUAL);
+
+        BorderPane alertLayout = new BorderPane();
+        alertLayout.setPadding(new Insets(10, 10, 10, 10));
+        alertLayout.setCenter(alertMsg);
+        alertLayout.setAlignment(alertMsg, Pos.CENTER);
+
+        Button okayBtn = new Button("Okay");
+        okayBtn.setStyle(IDLE_BUTTON_STYLE);
+        okayBtn.setOnMouseEntered(e -> okayBtn.setStyle(HOVERED_BUTTON_STYLE));
+        okayBtn.setOnMouseExited(e -> okayBtn.setStyle(IDLE_BUTTON_STYLE));
+
+        okayBtn.setOnAction(e -> {
+            window.close();
+        });
+
+        alertLayout.setRight(okayBtn);
+        alertLayout.setAlignment(okayBtn, Pos.BOTTOM_RIGHT);
+
+        Scene scene = new Scene(alertLayout);
         window.setScene(scene);
         window.showAndWait();
     }
