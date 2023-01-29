@@ -36,16 +36,19 @@ public abstract class Animal {
         this.image = image;
     }
 
-    public void setState(State state){
-        this.state=state;
+    public void setState(State state) {
+        this.state = state;
     }
-    public State getState(){
+
+    public State getState() {
         return state;
     }
-    public void setGrowthPoints(int growthPoints){
-        this.growthPoints=growthPoints;
+
+    public void setGrowthPoints(int growthPoints) {
+        this.growthPoints = growthPoints;
     }
-    public int getGrowthPoints(){
+
+    public int getGrowthPoints() {
         return growthPoints;
     }
 }
