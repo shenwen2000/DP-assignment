@@ -110,7 +110,7 @@ public class MenuItem extends MenuComponent {
 
         Text price;
         if (getName().equals("Premium food")) {
-            price = new Text("5");
+            price = new Text("Will according to ingredient(s) added");
         } else {
             price = new Text((getPrice() == 0 ? "Free" : String.valueOf(getPrice())));
         }
@@ -174,15 +174,19 @@ public class MenuItem extends MenuComponent {
 
         // Get the wallet amount and check enuf or not, then unlock
         confirmButton.setOnAction(e -> {
-            // if enuf then create a animal for him
             if (getType().equals("Animal")) {
                 if (getLocked()) {
-                    // checking money enuf to unlock the animal
-                    // if enuf set lock to unlock
+                    // if enuf
+                    setLocked(!getLocked());
+
+                    VBox vBox = new VBox(10);
+                    vBox = Farm.shop.getAllMenus().print(vBox, Farm.shop.getAllMenus());
+
+                    Farm.shop.shopLayout.setCenter(vBox);
+                    Farm.shop.shopLayout.setAlignment(vBox, Pos.TOP_LEFT);
                     //else
-                    setAlertMsg(getLocked() ? "Unlock" : "Buy", getType());
+//                    setAlertMsg(getLocked() ? "Unlock" : "Buy", getType());
                 } else {
-                    // same here, need to check the amount 1st
                     Farm farm = new Farm();
                     farm.createAnimal(getName());
                 }

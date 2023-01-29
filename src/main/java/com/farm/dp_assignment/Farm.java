@@ -38,6 +38,8 @@ public class Farm {
     private FoodFactory foodFactory = new FoodFactory();
     private AnimalFood animalFood;
 
+    public static Shop shop;
+
     public void setUpStartingPage(Stage primaryStage) {
         this.startingScene = primaryStage;
         startingScene.setTitle("Animal Farm");
@@ -132,10 +134,6 @@ public class Farm {
 
         HBox coinBox = new HBox(5);
 
-//        Text cointAmount = new Text("1000");
-//        cointAmount.setStyle("-fx-font-size: 25px; -fx-font-vertical-align:top");
-//        cointAmount.setBoundsType(TextBoundsType.VISUAL);
-
         //WalletFactory
         WalletFactory wallet = new WalletFactory();
         int totalCoin = wallet.getWalletAmount();
@@ -207,7 +205,7 @@ public class Farm {
         shopButton.setStyle("-fx-cursor: hand; -fx-background-color: transparent;");
         shopButton.setAlignment(Pos.CENTER);
 
-        Shop shop = new Shop();
+        shop = new Shop();
 
         shopButton.setOnAction(e -> {
             shop.printMenu();
@@ -335,5 +333,14 @@ public class Farm {
         Scene scene = new Scene(ingredientPageLayout);
         window.setScene(scene);
         window.showAndWait();
+    }
+
+
+    public Shop getShop() {
+        return shop;
+    }
+
+    public void setShop(Shop shop) {
+        this.shop = shop;
     }
 }
