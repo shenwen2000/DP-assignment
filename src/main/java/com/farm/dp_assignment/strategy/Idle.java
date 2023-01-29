@@ -2,23 +2,19 @@ package com.farm.dp_assignment.strategy;
 
 import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
-import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-
-public class MoveOnGround implements MoveBehavior {
-
+public class Idle implements MoveBehavior {
     @Override
     public void move(ImageView imageView) {
         //Instantiating TranslateTransition class
         TranslateTransition translate = new TranslateTransition();
 
-        //shifting the X coordinate of the centre of the circle by 400
-        translate.setByX(-900);
+        translate.setByY(50);
 
         //setting the duration for the Translate transition
-        translate.setDuration(Duration.millis(6000));
+        translate.setDuration(Duration.millis(3000));
 
         //setting cycle count for the Translate transition
         translate.setCycleCount(Animation.INDEFINITE);
@@ -31,6 +27,5 @@ public class MoveOnGround implements MoveBehavior {
 
         //playing the transition
         translate.play();
-
     }
 }

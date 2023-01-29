@@ -1,7 +1,13 @@
 package com.farm.dp_assignment;
 
 import com.farm.dp_assignment.composite.Shop;
+import com.farm.dp_assignment.decorator.*;
 import com.farm.dp_assignment.simpleFactory.SimpleAnimalFactory;
+import com.farm.dp_assignment.singleton.SingletonWallet;
+import com.farm.dp_assignment.singleton.WalletFactory;
+import com.farm.dp_assignment.strategy.Idle;
+import com.farm.dp_assignment.strategy.MoveOnGround;
+import com.farm.dp_assignment.strategy.Sleeping;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -25,13 +31,18 @@ import java.util.Objects;
 
 public class Farm {
 
-    Stage startingScene, farmScene;
+    Stage startingScene;
     Button startButton;
     SimpleAnimalFactory factory = new SimpleAnimalFactory();
     Animal animal = null;
 
     final String IDLE_BUTTON_STYLE = "-fx-background-color: #676AC2; -fx-border-color: #676AC2; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
     final String HOVERED_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #676AC2; -fx-text-fill: #676AC2; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
+
+    private FoodFactory foodFactory = new FoodFactory();
+    private AnimalFood animalFood;
+
+    public static Shop shop;
 
     public void setUpStartingPage(Stage primaryStage) {
         this.startingScene = primaryStage;
@@ -51,7 +62,6 @@ public class Farm {
 
         VBox content = new VBox(15);
         Scene scene = new Scene(content, bounds.getWidth(), bounds.getHeight());
-//        scene.getStylesheets().addAll(this.getClass().getResource("css/style.css").toExternalForm());
 
         startingScene.setScene(scene);
         startingScene.setX(bounds.getMinX());
@@ -127,12 +137,19 @@ public class Farm {
 
         HBox coinBox = new HBox(5);
 
-        Text cointAmount = new Text("1000");
-        cointAmount.setStyle("-fx-font-size: 25px; -fx-font-vertical-align:top");
-        cointAmount.setBoundsType(TextBoundsType.VISUAL);
+        //WalletFactory
+        WalletFactory walletFactory = new WalletFactory();
 
-        // After getting the amount of coin, pls add it at below sentence exp: (coinImageView, Amount)
-        coinBox.getChildren().addAll(coinImageView, cointAmount);
+        // Singleton wallet
+        SingletonWallet wallet = walletFactory.getWallet();
+        int totalCoin = wallet.getTotalAmount();
+
+        String totalCoinStr = Integer.toString(totalCoin);
+        Text totalCoinText = new Text(totalCoinStr);
+        totalCoinText.setStyle("-fx-font-size: 25px; -fx-font-vertical-align:top");
+        totalCoinText.setBoundsType(TextBoundsType.VISUAL);
+
+        coinBox.getChildren().addAll(coinImageView, totalCoinText);
 
         coinBox.setStyle("-fx-border-color: #000000; -fx-border-radius: 5px;");
         coinBox.setAlignment(Pos.BASELINE_RIGHT);
@@ -147,8 +164,7 @@ public class Farm {
         farmLayout.setAlignment(topSec, Pos.BOTTOM_LEFT);
 
 
-        // set up Action button
-
+        // Set up action button
         //Idle
         Button idleButton = new Button();
         Image idleImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/donald_duck_idle.png")));
@@ -182,6 +198,21 @@ public class Farm {
         sleepButton.setStyle("-fx-cursor: hand;");
         sleepButton.setTooltip(new Tooltip("Set movement of animal to sleep."));
 
+        if (sleepButton.isPressed()){
+            sleepButton.setOnAction(e -> {
+                this.animal.setMoveBehavior(new Sleeping());
+            });
+        }
+        else if (idleButton.isPressed()){
+            idleButton.setOnAction(e -> {
+                this.animal.setMoveBehavior(new Idle());
+            });
+        }
+        else if (moveButton.isPressed()){
+            moveButton.setOnAction(e -> {
+                this.animal.setMoveBehavior(new MoveOnGround());
+            });
+        }
         //Set up shop
         Button shopButton = new Button();
         Image shopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/shop.png")));
@@ -193,8 +224,7 @@ public class Farm {
         shopButton.setStyle("-fx-cursor: hand; -fx-background-color: transparent;");
         shopButton.setAlignment(Pos.CENTER);
 
-
-        Shop shop = new Shop();
+        shop = Shop.getShop();
 
         shopButton.setOnAction(e -> {
             shop.printMenu();
@@ -222,11 +252,12 @@ public class Farm {
 
     public void createAnimal(String nameType) {
         animal = factory.createAnimal(nameType);
-        this.startingScene = Main.primaryStage;
-        this.startingScene.setScene(setUpFarmPage());
+        refreshFarmPage();
     }
 
     public void setAddIngredientPage() {
+        animalFood = foodFactory.getAnimalFood("Normal");
+
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Add Ingredient(s)");
@@ -238,6 +269,16 @@ public class Farm {
         content.setPadding(new Insets(10, 10, 10, 10));
         content.setVgap(8);
         content.setHgap(12);
+
+        Text addedIngredientListText = new Text();
+        addedIngredientListText.setStyle("-fx-font-size: 15px; -fx-font-weight: bold");
+        addedIngredientListText.setBoundsType(TextBoundsType.VISUAL);
+        addedIngredientListText.setTextAlignment(TextAlignment.LEFT);
+
+        Text priceText = new Text("Price:5");
+        priceText.setStyle("-fx-font-size: 15px; -fx-font-weight: bold");
+        priceText.setBoundsType(TextBoundsType.VISUAL);
+        priceText.setTextAlignment(TextAlignment.LEFT);
 
         VBox ingredientSec = new VBox(10);
 
@@ -267,6 +308,12 @@ public class Farm {
         vitaminImageView.setFitHeight(100);
         vitaminButton.setStyle("-fx-cursor: hand;");
 
+        vitaminButton.setOnAction(e -> {
+            animalFood = new Vitamin(animalFood);
+            addedIngredientListText.setText(animalFood.getDescription());
+            priceText.setText("Price:" + String.valueOf(animalFood.cost()));
+        });
+
         ingredientSec.getChildren().addAll(proteinButton, vitaminButton);
 
         VBox ingredientPriceList = new VBox(10);
@@ -280,12 +327,7 @@ public class Farm {
         lineBreak1.setBoundsType(TextBoundsType.VISUAL);
         lineBreak1.setTextAlignment(TextAlignment.LEFT);
 
-        Text priceText = new Text("Price:5");
-        priceText.setStyle("-fx-font-size: 15px; -fx-font-weight: bold");
-        priceText.setBoundsType(TextBoundsType.VISUAL);
-        priceText.setTextAlignment(TextAlignment.LEFT);
-
-        ingredientPriceList.getChildren().addAll(ingredientListText, lineBreak1, priceText);
+        ingredientPriceList.getChildren().addAll(ingredientListText, addedIngredientListText, lineBreak1, priceText);
         content.getChildren().addAll(ingredientSec, ingredientPriceList);
 
         Button confirmBtn = new Button("Confirm");
@@ -293,6 +335,7 @@ public class Farm {
         confirmBtn.setOnMouseEntered(e -> confirmBtn.setStyle(HOVERED_BUTTON_STYLE));
         confirmBtn.setOnMouseExited(e -> confirmBtn.setStyle(IDLE_BUTTON_STYLE));
         confirmBtn.setAlignment(Pos.BASELINE_RIGHT);
+
         confirmBtn.setOnAction(e -> {
             // set the action at here
             window.close();
@@ -308,5 +351,18 @@ public class Farm {
         Scene scene = new Scene(ingredientPageLayout);
         window.setScene(scene);
         window.showAndWait();
+    }
+
+    public void refreshFarmPage() {
+        this.startingScene = Main.primaryStage;
+        this.startingScene.setScene(setUpFarmPage());
+    }
+
+    public Shop getShop() {
+        return shop;
+    }
+
+    public void setShop(Shop shop) {
+        this.shop = shop;
     }
 }

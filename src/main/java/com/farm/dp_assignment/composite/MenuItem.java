@@ -1,6 +1,8 @@
 package com.farm.dp_assignment.composite;
 
 import com.farm.dp_assignment.Farm;
+import com.farm.dp_assignment.singleton.SingletonWallet;
+import com.farm.dp_assignment.singleton.WalletFactory;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -110,7 +112,7 @@ public class MenuItem extends MenuComponent {
 
         Text price;
         if (getName().equals("Premium food")) {
-            price = new Text("5");
+            price = new Text("Will according to ingredient(s) added");
         } else {
             price = new Text((getPrice() == 0 ? "Free" : String.valueOf(getPrice())));
         }
@@ -172,18 +174,35 @@ public class MenuItem extends MenuComponent {
         Button cancelButton = new Button("Cancel");
         cancelButton.setStyle(IDLE_CANCEL_STYLE);
 
+        WalletFactory walletFactory = new WalletFactory();
+        SingletonWallet wallet = walletFactory.getWallet();
+
         // Get the wallet amount and check enuf or not, then unlock
         confirmButton.setOnAction(e -> {
-            // if enuf then create a animal for him
             if (getType().equals("Animal")) {
                 if (getLocked()) {
-                    // checking money enuf to unlock the animal
-                    // if enuf set lock to unlock
-                    //else
-                    setAlertMsg(getLocked() ? "Unlock" : "Buy", getType());
+                    if (wallet.getTotalAmount() >= getPrice()) {
+                        // set lock status to unlock
+                        setLocked(!getLocked());
+
+                        wallet.deductAmount(getPrice());
+
+                        // refresh again the manu page
+                        VBox vBox = new VBox(10);
+                        vBox = Farm.shop.getAllMenus().print(vBox, Farm.shop.getAllMenus());
+
+                        Farm.shop.shopLayout.setCenter(vBox);
+                        Farm.shop.shopLayout.setAlignment(vBox, Pos.TOP_LEFT);
+
+                        // refresh page
+                        Farm farm = new Farm();
+                        farm.refreshFarmPage();
+                    } else {
+                        setAlertMsg(getLocked() ? "Unlock" : "Buy", getType());
+                    }
                 } else {
-                    // same here, need to check the amount 1st
                     Farm farm = new Farm();
+                    wallet.deductAmount(getPrice());
                     farm.createAnimal(getName());
                 }
             } else {
