@@ -1,6 +1,7 @@
 package com.farm.dp_assignment;
 
 import com.farm.dp_assignment.composite.Shop;
+import com.farm.dp_assignment.decorator.*;
 import com.farm.dp_assignment.simpleFactory.SimpleAnimalFactory;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -32,6 +33,9 @@ public class Farm {
 
     final String IDLE_BUTTON_STYLE = "-fx-background-color: #676AC2; -fx-border-color: #676AC2; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
     final String HOVERED_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #676AC2; -fx-text-fill: #676AC2; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
+
+    private FoodFactory foodFactory = new FoodFactory();
+    private AnimalFood animalFood;
 
     public void setUpStartingPage(Stage primaryStage) {
         this.startingScene = primaryStage;
@@ -193,7 +197,6 @@ public class Farm {
         shopButton.setStyle("-fx-cursor: hand; -fx-background-color: transparent;");
         shopButton.setAlignment(Pos.CENTER);
 
-
         Shop shop = new Shop();
 
         shopButton.setOnAction(e -> {
@@ -227,6 +230,8 @@ public class Farm {
     }
 
     public void setAddIngredientPage() {
+        animalFood = foodFactory.getAnimalFood("Normal");
+
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Add Ingredient(s)");
@@ -238,6 +243,16 @@ public class Farm {
         content.setPadding(new Insets(10, 10, 10, 10));
         content.setVgap(8);
         content.setHgap(12);
+
+        Text addedIngredientListText = new Text();
+        addedIngredientListText.setStyle("-fx-font-size: 15px; -fx-font-weight: bold");
+        addedIngredientListText.setBoundsType(TextBoundsType.VISUAL);
+        addedIngredientListText.setTextAlignment(TextAlignment.LEFT);
+
+        Text priceText = new Text("Price:5");
+        priceText.setStyle("-fx-font-size: 15px; -fx-font-weight: bold");
+        priceText.setBoundsType(TextBoundsType.VISUAL);
+        priceText.setTextAlignment(TextAlignment.LEFT);
 
         VBox ingredientSec = new VBox(10);
 
@@ -267,6 +282,12 @@ public class Farm {
         vitaminImageView.setFitHeight(100);
         vitaminButton.setStyle("-fx-cursor: hand;");
 
+        vitaminButton.setOnAction(e -> {
+            animalFood = new Vitamin(animalFood);
+            addedIngredientListText.setText(animalFood.getDescription());
+            priceText.setText("Price:" + String.valueOf(animalFood.cost()));
+        });
+
         ingredientSec.getChildren().addAll(proteinButton, vitaminButton);
 
         VBox ingredientPriceList = new VBox(10);
@@ -280,12 +301,7 @@ public class Farm {
         lineBreak1.setBoundsType(TextBoundsType.VISUAL);
         lineBreak1.setTextAlignment(TextAlignment.LEFT);
 
-        Text priceText = new Text("Price:5");
-        priceText.setStyle("-fx-font-size: 15px; -fx-font-weight: bold");
-        priceText.setBoundsType(TextBoundsType.VISUAL);
-        priceText.setTextAlignment(TextAlignment.LEFT);
-
-        ingredientPriceList.getChildren().addAll(ingredientListText, lineBreak1, priceText);
+        ingredientPriceList.getChildren().addAll(ingredientListText, addedIngredientListText, lineBreak1, priceText);
         content.getChildren().addAll(ingredientSec, ingredientPriceList);
 
         Button confirmBtn = new Button("Confirm");
@@ -293,6 +309,7 @@ public class Farm {
         confirmBtn.setOnMouseEntered(e -> confirmBtn.setStyle(HOVERED_BUTTON_STYLE));
         confirmBtn.setOnMouseExited(e -> confirmBtn.setStyle(IDLE_BUTTON_STYLE));
         confirmBtn.setAlignment(Pos.BASELINE_RIGHT);
+
         confirmBtn.setOnAction(e -> {
             // set the action at here
             window.close();
