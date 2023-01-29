@@ -298,6 +298,12 @@ public class Farm {
         proteinImageView.setFitHeight(100);
         proteinButton.setStyle("-fx-cursor: hand;");
 
+        proteinButton.setOnAction(e -> {
+            animalFood = new Protein(animalFood);
+            addedIngredientListText.setText(animalFood.getDescription());
+            priceText.setText("Price:" + String.valueOf(animalFood.cost()));
+        });
+
         // create vitamin button
         Button vitaminButton = new Button();
         Image vitaminImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/vitamin.png")));
@@ -336,10 +342,19 @@ public class Farm {
         confirmBtn.setOnMouseExited(e -> confirmBtn.setStyle(IDLE_BUTTON_STYLE));
         confirmBtn.setAlignment(Pos.BASELINE_RIGHT);
 
-        confirmBtn.setOnAction(e -> {
             // set the action at here
-            window.close();
-        });
+            confirmBtn.setOnAction(e -> {
+//                //WalletFactory
+//                WalletFactory walletFactory = new WalletFactory();
+//
+//                // Singleton wallet
+//                SingletonWallet wallet = walletFactory.getWallet();
+//                int totalCoin = wallet.getTotalAmount();
+//               totalCoin= totalCoin- animalFood.cost();
+
+                window.close();
+            });
+
 
         ingredientPageLayout.setTop(titleText);
         ingredientPageLayout.setAlignment(titleText, Pos.BOTTOM_LEFT);

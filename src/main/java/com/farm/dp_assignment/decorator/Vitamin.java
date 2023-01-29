@@ -9,7 +9,7 @@ public class Vitamin extends FoodDecorator {
     }
 
     public String getDescription() {
-        return "\n1 scoop of vitamin is added to " + animalFood.getDescription();
+        return "\nVitamin * 1" + animalFood.getDescription();
     }
 
     @Override

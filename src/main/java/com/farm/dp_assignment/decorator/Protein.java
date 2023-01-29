@@ -8,7 +8,7 @@ public class Protein extends FoodDecorator {
     }
 
     public String getDescription() {
-        return "\n1 scoop of protein is added to " + animalFood.getDescription();
+        return "\nProtein * 1 "+ animalFood.getDescription();
     }
 
     @Override
