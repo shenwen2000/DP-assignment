@@ -1,5 +1,6 @@
 package com.farm.dp_assignment;
 
+import com.farm.dp_assignment.singleton.WalletFactory;
 import javafx.application.Application;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;

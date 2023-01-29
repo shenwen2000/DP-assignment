@@ -18,10 +18,23 @@ public class Shop {
     MenuComponent foodMenu;
     MenuComponent allMenus;
 
+    public static BorderPane shopLayout;
+
+    private static Shop uniqueShop = new Shop();
+
+    private Shop() {
+    }
+
+    public static Shop getShop() {
+        return uniqueShop;
+    }
+
     public void printMenu() {
-        this.createMenuList();
-        this.createAnimalMenuItemList(animalMenu);
-        this.createFoodMenuItemList(foodMenu);
+        if (Objects.isNull(allMenus)) {
+            this.createMenuList();
+            this.createAnimalMenuItemList(animalMenu);
+            this.createFoodMenuItemList(foodMenu);
+        }
 
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
@@ -29,7 +42,7 @@ public class Shop {
         window.setMaxWidth(600);
         window.setMinHeight(700);
 
-        BorderPane shopLayout = new BorderPane();
+        shopLayout = new BorderPane();
         shopLayout.setPadding(new Insets(10, 10, 10, 10));
 
         VBox vBox = new VBox(10);
@@ -39,8 +52,8 @@ public class Shop {
         shopLayout.setCenter(vBox);
         shopLayout.setAlignment(vBox, Pos.TOP_LEFT);
 
-        Scene scene = new Scene(shopLayout);
-        window.setScene(scene);
+        Scene shopScene = new Scene(shopLayout);
+        window.setScene(shopScene);
         window.showAndWait();
     }
 
@@ -75,5 +88,29 @@ public class Shop {
 
         foodMenu.add(new MenuItem("Normal food", false, 0, foodImage, "Food"));
         foodMenu.add(new MenuItem("Premium food", false, 0, goodFoodImage, "Food"));
+    }
+
+    public MenuComponent getAnimalMenu() {
+        return animalMenu;
+    }
+
+    public MenuComponent getFoodMenu() {
+        return foodMenu;
+    }
+
+    public MenuComponent getAllMenus() {
+        return allMenus;
+    }
+
+    public void setAnimalMenu(MenuComponent animalMenu) {
+        this.animalMenu = animalMenu;
+    }
+
+    public void setFoodMenu(MenuComponent foodMenu) {
+        this.foodMenu = foodMenu;
+    }
+
+    public void setAllMenus(MenuComponent allMenus) {
+        this.allMenus = allMenus;
     }
 }
