@@ -4,7 +4,9 @@ import com.farm.dp_assignment.composite.Shop;
 import com.farm.dp_assignment.decorator.*;
 import com.farm.dp_assignment.simpleFactory.SimpleAnimalFactory;
 import com.farm.dp_assignment.strategy.Chicken;
+import com.farm.dp_assignment.strategy.Idle;
 import com.farm.dp_assignment.strategy.MoveOnGround;
+import com.farm.dp_assignment.strategy.Sleeping;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -188,6 +190,22 @@ public class Farm {
         sleepButton.setStyle("-fx-cursor: hand;");
         sleepButton.setTooltip(new Tooltip("Set movement of animal to sleep."));
 
+        if (sleepButton.isPressed()){
+            sleepButton.setOnAction(e -> {
+                this.animal.setMoveBehavior(new Sleeping());
+            });
+        }
+        else if (idleButton.isPressed()){
+            idleButton.setOnAction(e -> {
+                this.animal.setMoveBehavior(new Idle());
+            });
+        }
+        else if (moveButton.isPressed()){
+            moveButton.setOnAction(e -> {
+                this.animal.setMoveBehavior(new MoveOnGround());
+            });
+        }
+
         //Set up shop
         Button shopButton = new Button();
         Image shopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/shop.png")));
@@ -210,17 +228,6 @@ public class Farm {
 
         farmLayout.setBottom(bottomMenu);
         farmLayout.setAlignment(bottomMenu, Pos.BASELINE_LEFT);
-
-        Button mvOnGrd = new Button("Move On Ground");
-        mvOnGrd.setStyle("-fx-padding: 10px;-fx-border-insets: 5px;-fx-background-insets: 5px;-fx-border:2px black");
-        mvOnGrd.setStyle("-fx-cursor: hand;");
-
-        farmLayout.setCenter(mvOnGrd);
-        farmLayout.setAlignment(mvOnGrd, Pos.BOTTOM_RIGHT);
-
-//        mvOnGrd.setOnAction(e -> {
-//            animal.setMoveBehavior(new MoveOnGround());
-//        });
 
         if (!Objects.isNull(animal)) {
             ImageView animalImageView = new ImageView(animal.getImage());

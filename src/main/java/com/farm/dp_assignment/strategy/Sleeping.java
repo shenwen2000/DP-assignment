@@ -1,5 +1,6 @@
 package com.farm.dp_assignment.strategy;
 
+import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -14,7 +15,7 @@ public class Sleeping implements MoveBehavior {
         translate.setDuration(Duration.millis(2000));
 
         //setting cycle count for the Translate transition
-        translate.setCycleCount(5);
+        translate.setCycleCount(Animation.INDEFINITE);
 
         //setting Circle as the node onto which the transition will be applied
         translate.setNode(imageView);
