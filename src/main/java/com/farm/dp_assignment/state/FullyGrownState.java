@@ -25,9 +25,10 @@ public class FullyGrownState implements State {
     int coin = 0;
     final String IDLE_BUTTON_STYLE = "-fx-background-color: #676AC2; -fx-border-color: #676AC2; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
     final String HOVERED_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #676AC2; -fx-text-fill: #676AC2; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
+    boolean change = false;
 
     public FullyGrownState(Animal animal) {
-        farm=Farm.getInstance();
+        farm = Farm.getInstance();
         this.animal = animal;
     }
 
@@ -71,12 +72,16 @@ public class FullyGrownState implements State {
         okayBtn.setOnMouseExited(e -> okayBtn.setStyle(IDLE_BUTTON_STYLE));
 
         okayBtn.setOnAction(e -> {
-            farm.setAnimalImageView(null);
-            animal.setImage(null);
-            farm.setAnimal(null);
-            animal.setImage(null);
-            animal.setState(new SoldState());
-            window.close();
+            change = true;
+            if (change) {
+                farm.setAnimalImageView(null);
+                animal.setImage(null);
+                farm.setAnimal(null);
+                animal.setImage(null);
+                animal.setType(null);
+                animal.setState(new SoldState());
+                window.close();
+            }
         });
 
         alertLayout.setRight(okayBtn);

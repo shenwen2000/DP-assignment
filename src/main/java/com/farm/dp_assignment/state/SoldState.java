@@ -17,6 +17,7 @@ public class SoldState implements State {
         farm.setAnimal(null);
         animal.setImage(null);
         farm.setAnimalImageView(null);
+        animal.setType(null);
     }
 
 }
