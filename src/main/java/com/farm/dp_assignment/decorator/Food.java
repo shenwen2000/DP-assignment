@@ -8,7 +8,7 @@ public class Food extends AnimalFood {
 
     @Override
     public Integer cost() {
-        return 2;
+        return 1;
     }
 
     @Override

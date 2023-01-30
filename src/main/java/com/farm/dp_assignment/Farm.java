@@ -393,6 +393,7 @@ public class Farm {
 
         // set the action at here
         confirmBtn.setOnAction(e -> {
+
             wallet.deductAmount(animalFood.cost());
             growthPoint.setProgress(growthPoint.getProgress() + (animalFood.growthPoint() / slider.getMax()));
             growthPointBar.setProgress(growthPointBar.getProgress() + (animalFood.growthPoint() / slider.getMax()));
@@ -400,6 +401,7 @@ public class Farm {
 
             animal.setGrowthPoints((int) (animal.getGrowthPoints() + animalFood.growthPoint()));
 
+            //update the state if progress bar is full
             if (growthPointBar.getProgress() >= 1) {
                 animal.checkConditionState();
             }
