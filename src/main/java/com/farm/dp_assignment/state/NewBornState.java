@@ -75,11 +75,9 @@ public class NewBornState implements State {
                 farm.getFarmLayout().setAlignment(imageView, Pos.BOTTOM_RIGHT);
                 change = false;
             }
-
+            animal.setState(new YoungState(animal));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-
-        animal.setState(new YoungState(animal));
     }
 }

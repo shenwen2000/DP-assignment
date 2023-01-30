@@ -1,8 +1,9 @@
 package com.farm.dp_assignment;
 
 import javafx.scene.image.Image;
-import java.io.InputStream;
 
+
+// Self created class for storing URL of the image
 public class LocatedImage extends Image {
 
     private final String url;

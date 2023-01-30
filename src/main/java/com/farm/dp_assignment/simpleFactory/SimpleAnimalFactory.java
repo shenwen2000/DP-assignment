@@ -16,9 +16,11 @@ public class SimpleAnimalFactory {
     Image cowImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/cow_1.png").toURI().toString()));
     Image goatImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/goat_1.png").toURI().toString()));
 
+    // Constructor
     public SimpleAnimalFactory() throws URISyntaxException {
     }
 
+    // This is the factory where we create animal
     public Animal createAnimal(String animalType) {
         Animal animal = null;
 

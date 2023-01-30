@@ -36,34 +36,36 @@ public class YoungState implements State {
                 animal.setImage(chickenImage);
                 imageView = new ImageView(animal.getImage());
 
-                //farm.getSlider().setMax(10);
+                farm.getSlider().setMax(10);
                 change = true;
-            } else if (animal.getType().equals("Duck") && animal.getGrowthPoints() >= 20) {
+            } else if (animal.getClass().getName().contains("Duck") && animal.getGrowthPoints() >= 20) {
                 duckImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/duck_3.png").toURI().toString()));
                 animal.setImage(duckImage);
                 imageView = new ImageView(animal.getImage());
 
-                //farm.getSlider().setMax(20);
+                farm.getSlider().setMax(20);
                 change = true;
-            } else if (animal.getType().equals("Cow") && animal.getGrowthPoints() >= 100) {
+            } else if (animal.getClass().getName().contains("Cow") && animal.getGrowthPoints() >= 100) {
+
                 cowImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/cow_3.png").toURI().toString()));
                 animal.setImage(cowImage);
                 imageView = new ImageView(animal.getImage());
 
-                //farm.getSlider().setMax(100);
+                farm.getSlider().setMax(100);
                 change = true;
-            } else if (animal.getType().equals("Goat") && animal.getGrowthPoints() >= 250) {
+            } else if (animal.getClass().getName().contains("Goat") && animal.getGrowthPoints() >= 250) {
+
                 goatImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/goat_3.png").toURI().toString()));
                 animal.setImage(goatImage);
                 imageView = new ImageView(animal.getImage());
 
-                //farm.getSlider().setMax(250);
+                farm.getSlider().setMax(250);
                 change = true;
             }
 
             if (change) {
-                //farm.getGrowthPoint().setProgress(0);
-                // farm.getGrowthPointBar().setProgress(0);
+                farm.getGrowthPoint().setProgress(0);
+                farm.getGrowthPointBar().setProgress(0);
                 farm.setAnimalImageView(imageView);
                 imageView.setFitWidth(130);
                 imageView.setFitHeight(130);
@@ -75,10 +77,9 @@ public class YoungState implements State {
                 change = false;
             }
 
+            animal.setState(new FullyGrownState(animal));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-
-        animal.setState(new FullyGrownState(animal));
     }
 }
