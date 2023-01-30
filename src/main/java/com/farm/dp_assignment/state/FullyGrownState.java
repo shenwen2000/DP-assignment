@@ -16,16 +16,16 @@ import javafx.stage.Stage;
 public class FullyGrownState implements State {
     Animal animal;
     Farm farm;
-    int coin = 0;
     final String IDLE_BUTTON_STYLE = "-fx-background-color: #676AC2; -fx-border-color: #676AC2; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
     final String HOVERED_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #676AC2; -fx-text-fill: #676AC2; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
     boolean change = false;
     SingletonWallet wallet;
+    int coin = 0;
 
     public FullyGrownState(Animal animal) {
         farm = Farm.getInstance();
         this.animal = animal;
-        wallet= SingletonWallet.getInstance();
+        wallet = SingletonWallet.getInstance();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class FullyGrownState implements State {
         }
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -69,14 +69,9 @@ public class FullyGrownState implements State {
         okayBtn.setOnAction(e -> {
             change = true;
             if (change) {
-                farm.setAnimalImageView(null);
-                animal.setImage(null);
-                farm.setAnimal(null);
-                animal.setImage(null);
-                animal.setType(null);
                 wallet.addAmount(coin);
-                System.out.println(wallet.getTotalAmount());
-                animal.setState(new SoldState());
+                animal.setState(new SoldState(animal));
+                animal.checkConditionState();
                 window.close();
             }
         });

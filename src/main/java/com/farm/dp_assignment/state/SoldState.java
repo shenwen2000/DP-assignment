@@ -7,16 +7,19 @@ public class SoldState implements State {
     Animal animal;
     Farm farm;
 
-    public SoldState() {
-        animal = null;
+    public SoldState(Animal animal) {
+        this.animal = animal;
+        farm = Farm.getInstance();
     }
 
     @Override
     public void checkingCondition() {
         farm.setSlider(null);
-        farm.setAnimal(null);
+        farm.setGrowthPoint(null);
+        farm.setGrowthPointBar(null);
         animal.setImage(null);
         farm.setAnimalImageView(null);
-        animal.setType(null);
+        farm.setAnimal(null);
+        farm.getFarmLayout().setCenter(null);
     }
 }
