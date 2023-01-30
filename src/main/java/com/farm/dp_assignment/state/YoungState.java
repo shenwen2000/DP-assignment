@@ -68,6 +68,7 @@ public class YoungState implements State {
             if (change) {
                 farm.getGrowthPoint().setProgress(0);
                 farm.getGrowthPointBar().setProgress(0);
+                animal.setGrowthPoints(0);
                 farm.setAnimalImageView(imageView);
                 imageView.setFitWidth(130);
                 imageView.setFitHeight(130);
