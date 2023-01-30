@@ -16,13 +16,15 @@ public class MoveOnGround implements MoveBehavior {
     @Override
     public void move(ImageView imageView) {
 
+        Farm farm = Farm.getInstance();
+
         String[] pathArr = ((LocatedImage) imageView.getImage()).getURL().split("/");
         String[] imageNameArr = pathArr[pathArr.length - 1].split("\\.");
         if (imageNameArr[0].contains("sleep")) {
             imageNameArr[0] = imageNameArr[0].replace("sleep", "");
             String path = "/com/farm/dp_assignment/image/" + imageNameArr[0] + ".png";
             try {
-                Farm.animal.setImage(new LocatedImage(Objects.requireNonNull(getClass().getResource(path).toURI().toString())));
+                farm.getAnimal().setImage(new LocatedImage(Objects.requireNonNull(getClass().getResource(path).toURI().toString())));
                 Farm.setUpFarmPage();
             } catch (URISyntaxException e) {
                 e.printStackTrace();

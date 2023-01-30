@@ -8,12 +8,12 @@ public class Food extends AnimalFood {
 
     @Override
     public Integer cost() {
-        return 5;
+        return 2;
     }
 
     @Override
     public Double growthPoint() {
-        return 0.05;
+        return 1.00;
     }
 
 

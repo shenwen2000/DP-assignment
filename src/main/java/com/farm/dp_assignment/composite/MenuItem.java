@@ -180,6 +180,7 @@ public class MenuItem extends MenuComponent {
 
         // Get the wallet amount and check enuf or not, then unlock
         confirmButton.setOnAction(e -> {
+            Farm farm = Farm.getInstance();
             if (getType().equals("Animal")) {
                 if (getLocked()) {
                     if (wallet.getTotalAmount() >= getPrice()) {
@@ -190,31 +191,26 @@ public class MenuItem extends MenuComponent {
 
                         // refresh again the manu page
                         VBox vBox = new VBox(10);
-                        vBox = Farm.shop.getAllMenus().print(vBox, Farm.shop.getAllMenus());
+                        vBox = farm.getShop().getAllMenus().print(vBox, farm.getShop().getAllMenus());
 
-                        Farm.shop.shopLayout.setCenter(vBox);
-                        Farm.shop.shopLayout.setAlignment(vBox, Pos.TOP_LEFT);
+                        farm.getShop().shopLayout.setCenter(vBox);
+                        farm.getShop().shopLayout.setAlignment(vBox, Pos.TOP_LEFT);
+
+                        farm.updateCoinAmount();
                     } else {
                         setAlertMsg(getLocked() ? "Unlock" : "Buy", getType());
                     }
                 } else {
-                    Farm farm = null;
-                    try {
-                        farm = new Farm();
-                    } catch (URISyntaxException ex) {
-                        ex.printStackTrace();
-                    }
                     wallet.deductAmount(getPrice());
+                    farm.setAnimal(null);
+                    farm.setSlider(null);
+                    farm.setGrowthPointBar(null);
+                    farm.setGrowthPoint(null);
+                    farm.setAnimalImageView(null);
                     farm.createAnimal(getName());
                 }
             } else {
                 if (getName().equals("Premium food")) {
-                    Farm farm = null;
-                    try {
-                        farm = new Farm();
-                    } catch (URISyntaxException ex) {
-                        ex.printStackTrace();
-                    }
                     farm.setAddIngredientPage();
                 }
             }

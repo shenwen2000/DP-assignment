@@ -18,7 +18,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        Farm farm = new Farm();
+        Farm farm = Farm.getInstance();
         farm.setUpStartingPage(this.primaryStage);
     }
 }
