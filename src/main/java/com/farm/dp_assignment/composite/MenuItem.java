@@ -163,6 +163,7 @@ public class MenuItem extends MenuComponent {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
 
+        // Window title
         if (getLocked()) {
             window.setTitle("Unlock " + getName());
         } else {
@@ -177,6 +178,7 @@ public class MenuItem extends MenuComponent {
 
         VBox content = new VBox(10);
 
+        // Unlock message
         Text unlockMsg = new Text(getLocked() ? "Are you sure to unlock " + getName() : "Are you sure to buy " + getName());
         unlockMsg.setStyle("-fx-font-size: 15px; -fx-font-vertical-align:top");
         unlockMsg.setBoundsType(TextBoundsType.VISUAL);
@@ -193,24 +195,26 @@ public class MenuItem extends MenuComponent {
         Button cancelButton = new Button("Cancel");
         cancelButton.setStyle(IDLE_CANCEL_STYLE);
 
-        // Get the wallet amount and check enuf or not, then unlock
         confirmButton.setOnAction(e -> {
-
             if (getType().equals("Animal")) {
                 if (getLocked()) {
+                    // check the amount of the wallet enough to buy or unlock
                     if (wallet.getTotalAmount() >= getPrice()) {
                         // set lock status to unlock
                         setLocked(!getLocked());
 
+                        // deduct amount
                         wallet.deductAmount(getPrice());
 
                         // refresh again the manu page
                         VBox vBox = new VBox(10);
                         vBox = farm.getShop().getAllMenus().print(vBox, farm.getShop().getAllMenus());
 
+                        // Set up the new menu
                         farm.getShop().shopLayout.setCenter(vBox);
                         farm.getShop().shopLayout.setAlignment(vBox, Pos.TOP_LEFT);
 
+                        // update the coin amount
                         farm.updateCoinAmount();
                     } else {
                         setAlertMsg(getLocked() ? "Unlock" : "Buy", getName());
@@ -280,6 +284,7 @@ public class MenuItem extends MenuComponent {
         window.showAndWait();
     }
 
+    // pop up confirm message when buy a new animal
     private void confirmChgAnimal() {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
@@ -332,6 +337,7 @@ public class MenuItem extends MenuComponent {
         window.showAndWait();
     }
 
+    // Buy animal method
     private void buyAnimal() {
         if (!wallet.deductAmount(getPrice())) {
             setAlertMsg(getLocked() ? "Unlock" : "Buy", getName());

@@ -7,18 +7,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.util.Objects;
-import java.util.Timer;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class FullyGrownState implements State {
     Animal animal;
@@ -37,16 +30,15 @@ public class FullyGrownState implements State {
 
     @Override
     public void checkingCondition() {
-        if (animal.getClass().getName().contains("Chicken")) {
+        if (animal.getType().equals("Chicken")) {
             coin = 3;
-        } else if (animal.getClass().getName().contains("Duck")) {
+        } else if (animal.getType().equals("Duck")) {
             coin = 6;
-        } else if (animal.getClass().getName().contains("Cow")) {
+        } else if (animal.getType().equals("Cow")) {
             coin = 30;
-        } else if (animal.getClass().getName().contains("Goat")) {
+        } else if (animal.getType().equals("Goat")) {
             coin = 75;
         }
-        //Subject to change
 
         try {
             Thread.sleep(3000);
@@ -96,7 +88,5 @@ public class FullyGrownState implements State {
         Scene scene = new Scene(alertLayout);
         window.setScene(scene);
         window.showAndWait();
-
-
     }
 }
