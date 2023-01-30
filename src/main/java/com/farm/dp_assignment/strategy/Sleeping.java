@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 public class Sleeping implements MoveBehavior {
+
     @Override
     public void move(ImageView imageView) {
         //Instantiating TranslateTransition class

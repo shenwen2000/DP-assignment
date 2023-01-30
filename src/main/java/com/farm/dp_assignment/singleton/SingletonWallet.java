@@ -1,7 +1,7 @@
 package com.farm.dp_assignment.singleton;
 
 public class SingletonWallet implements Wallet {
-    private int totalAmount = 5;
+    private int totalAmount = 1000;
     private static SingletonWallet uniqueWallet = new SingletonWallet();
 
     private SingletonWallet() {

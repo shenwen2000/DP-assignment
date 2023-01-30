@@ -1,10 +1,7 @@
 package com.farm.dp_assignment.simpleFactory;
 
 import com.farm.dp_assignment.Animal;
-import com.farm.dp_assignment.strategy.Chicken;
-import com.farm.dp_assignment.strategy.Cow;
-import com.farm.dp_assignment.strategy.Duck;
-import com.farm.dp_assignment.strategy.Goat;
+import com.farm.dp_assignment.strategy.*;
 import javafx.scene.image.Image;
 
 import java.util.Objects;

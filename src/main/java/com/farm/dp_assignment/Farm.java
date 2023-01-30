@@ -6,6 +6,7 @@ import com.farm.dp_assignment.simpleFactory.SimpleAnimalFactory;
 import com.farm.dp_assignment.singleton.SingletonWallet;
 import com.farm.dp_assignment.singleton.WalletFactory;
 import com.farm.dp_assignment.strategy.Idle;
+import com.farm.dp_assignment.strategy.MoveBehavior;
 import com.farm.dp_assignment.strategy.MoveOnGround;
 import com.farm.dp_assignment.strategy.Sleeping;
 import javafx.geometry.Insets;
@@ -46,6 +47,8 @@ public class Farm {
 
     private SingletonWallet wallet;
 
+    public static double screenWidth;
+
     public void setUpStartingPage(Stage primaryStage) {
         this.startingScene = primaryStage;
         startingScene.setTitle("Animal Farm");
@@ -61,9 +64,9 @@ public class Farm {
         });
 
         Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
-
+        screenWidth = bounds.getWidth();
         VBox content = new VBox(15);
-        Scene scene = new Scene(content, bounds.getWidth(), bounds.getHeight());
+        Scene scene = new Scene(content, screenWidth, bounds.getHeight());
 
         startingScene.setScene(scene);
         startingScene.setX(bounds.getMinX());
@@ -73,7 +76,7 @@ public class Farm {
         Image backgroundImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/background_image.jpg")));
         ImageView backgroundImageView = new ImageView(backgroundImage);
         backgroundImageView.setFitHeight(bounds.getHeight() - 100);
-        backgroundImageView.setFitWidth(bounds.getWidth() - 100);
+        backgroundImageView.setFitWidth(screenWidth - 100);
         backgroundImageView.setPreserveRatio(true);
         content.getChildren().addAll(backgroundImageView, startButton);
         content.setAlignment(Pos.CENTER);
@@ -177,6 +180,13 @@ public class Farm {
         idleButton.setStyle("-fx-cursor: hand;");
         idleButton.setTooltip(new Tooltip("Set movement of animal to idle."));
 
+        idleButton.setOnAction(e -> {
+            if (!Objects.isNull(this.animal)) {
+                this.animal.setMoveBehavior(new Idle());
+                this.animal.performMove(new ImageView(this.animal.getImage()));
+            }
+        });
+
         // move
         Button moveButton = new Button();
         Image movementImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/donald_duck_move.gif")));
@@ -187,6 +197,13 @@ public class Farm {
         moveButton.setGraphic(movementImageView);
         moveButton.setStyle("-fx-cursor: hand;");
         moveButton.setTooltip(new Tooltip("Set movement of animal to move."));
+
+        moveButton.setOnAction(e -> {
+            if (!Objects.isNull(this.animal)) {
+                this.animal.setMoveBehavior(new MoveOnGround());
+                this.animal.performMove(new ImageView(this.animal.getImage()));
+            }
+        });
 
         // Sleep
         Button sleepButton = new Button();
@@ -199,19 +216,10 @@ public class Farm {
         sleepButton.setStyle("-fx-cursor: hand;");
         sleepButton.setTooltip(new Tooltip("Set movement of animal to sleep."));
 
-        if (sleepButton.isPressed()) {
-            sleepButton.setOnAction(e -> {
-                this.animal.setMoveBehavior(new Sleeping());
-            });
-        } else if (idleButton.isPressed()) {
-            idleButton.setOnAction(e -> {
-                this.animal.setMoveBehavior(new Idle());
-            });
-        } else if (moveButton.isPressed()) {
-            moveButton.setOnAction(e -> {
-                this.animal.setMoveBehavior(new MoveOnGround());
-            });
-        }
+        sleepButton.setOnAction(e -> {
+
+        });
+
         //Set up shop
         Button shopButton = new Button();
         Image shopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/shop.png")));
@@ -251,6 +259,7 @@ public class Farm {
 
     public void createAnimal(String nameType) {
         animal = factory.createAnimal(nameType);
+        MoveBehavior.translate.stop();
         refreshFarmPage();
     }
 
