@@ -2,7 +2,6 @@ package com.farm.dp_assignment.composite;
 
 import com.farm.dp_assignment.Farm;
 import com.farm.dp_assignment.singleton.SingletonWallet;
-import com.farm.dp_assignment.singleton.WalletFactory;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -27,6 +26,7 @@ public class MenuItem extends MenuComponent {
     Image image;
     String type;
 
+    // button styles
     final String IDLE_BUTTON_STYLE = "-fx-background-color: #676AC2; -fx-border-color: #676AC2; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
     final String HOVERED_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #676AC2; -fx-text-fill: #676AC2; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
     final String IDLE_CANCEL_STYLE = "-fx-background-color: transparent; fx-cursor: hand;  -fx-text-fill: #676AC2; -fx-border-bottom-color: #676AC2; -fx-cursor: hand; -fx-font-weight: bold";
@@ -39,49 +39,61 @@ public class MenuItem extends MenuComponent {
         this.type = type;
     }
 
+    //get item name
     @Override
     public String getName() {
         return name;
     }
 
+    //check whether the item is locked (some are locked for animal menu)
     public Boolean getLocked() {
         return isLocked;
     }
 
+    //get the price of the item
     @Override
     public int getPrice() {
         return price;
     }
 
+    //image of the item
     @Override
     public Image getImage() {
         return image;
     }
 
+    //type of the item such as Animal or Food
     public String getType() {
         return type;
     }
 
+    //change the name of the item
     public void setName(String name) {
         this.name = name;
     }
 
+    //to lock or unlock the item
     public void setLocked(Boolean locked) {
         isLocked = locked;
     }
 
+    //change the price of the item
     public void setPrice(int price) {
         this.price = price;
     }
 
+    //change the image of the item
     public void setImage(Image image) {
         this.image = image;
     }
 
+    //change the type of the item
     public void setType(String type) {
         this.type = type;
     }
 
+
+    //print menu item as a row in the pop up window
     public VBox print(VBox vBox, MenuComponent menuComponent) {
         StackPane stackPane = new StackPane();
 
@@ -97,20 +109,25 @@ public class MenuItem extends MenuComponent {
         itemButton.setPrefSize(50, 50);
         itemButton.setStyle("-fx-border:none; -fx-cursor: hand;");
 
+        //if the item is locked, there is a tooltip when pointing on the button
         if (getLocked()) {
             itemButton.setTooltip(new Tooltip(getName() + " is locked"));
         }
 
+        //set image for the item button
         itemButton.setGraphic(imageView);
 
+        //call unlock page once click on item button
         itemButton.setOnAction(e -> {
             setUnlockPage();
         });
 
+        //set text for the item name
         Text nameType = new Text(getName());
         nameType.setStyle("-fx-font-size: 15px; -fx-font-vertical-align:top");
         nameType.setBoundsType(TextBoundsType.VISUAL);
 
+        //set text for the item price
         Text price;
         if (getName().equals("Premium food")) {
             price = new Text("Will according to ingredient(s) added");
@@ -123,6 +140,7 @@ public class MenuItem extends MenuComponent {
 
         menuItemBox.getChildren().addAll(itemButton, nameType, price);
 
+        //add lock image for the animals that are locked
         if (getType().equals("Animal")) {
             if (getLocked()) {
                 Image lockImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/lock.png")));
@@ -141,6 +159,7 @@ public class MenuItem extends MenuComponent {
         return vBox;
     }
 
+    //pop up modal for the item button's actions (buy or unlock)
     private void setUnlockPage() {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
@@ -175,8 +194,8 @@ public class MenuItem extends MenuComponent {
         Button cancelButton = new Button("Cancel");
         cancelButton.setStyle(IDLE_CANCEL_STYLE);
 
-        WalletFactory walletFactory = new WalletFactory();
-        SingletonWallet wallet = walletFactory.getWallet();
+//        WalletFactory walletFactory = new WalletFactory();
+        SingletonWallet wallet = SingletonWallet.getInstance();
 
         // Get the wallet amount and check enuf or not, then unlock
         confirmButton.setOnAction(e -> {
@@ -237,6 +256,7 @@ public class MenuItem extends MenuComponent {
         window.showAndWait();
     }
 
+    //pop up alert messages when wallet amount is not enuf to unlock or buy
     private void setAlertMsg(String actionType, String type) {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
@@ -244,7 +264,7 @@ public class MenuItem extends MenuComponent {
         window.setMinHeight(150);
         window.setTitle("Alert");
 
-        Text alertMsg = new Text("Not have enough money to " + actionType + " this " + type);
+        Text alertMsg = new Text("You do not have enough money to " + actionType + " this " + type);
         alertMsg.setStyle("-fx-font-size: 15px; -fx-font-vertical-align:top");
         alertMsg.setBoundsType(TextBoundsType.VISUAL);
 

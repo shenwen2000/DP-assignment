@@ -25,10 +25,12 @@ public class Shop {
     private Shop() {
     }
 
+    //make the shop singleton
     public static Shop getShop() {
         return uniqueShop;
     }
 
+    //print menu as a modal
     public void printMenu() {
         if (Objects.isNull(allMenus)) {
             this.createMenuList();
@@ -57,6 +59,7 @@ public class Shop {
         window.showAndWait();
     }
 
+    //create list of menus
     private void createMenuList() {
         Image allMenusImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/hamburger.png")));
         Image animalShopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/pet_shop.png")));
@@ -70,6 +73,7 @@ public class Shop {
         allMenus.add(foodMenu);
     }
 
+    //add animal items to animal menu
     private void createAnimalMenuItemList(MenuComponent animalMenu) {
         Image chickenImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/chicken_1.png")));
         Image duckImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/duck_1.png")));
@@ -82,6 +86,7 @@ public class Shop {
         animalMenu.add(new MenuItem("Goat", true, 25, goatImage, "Animal"));
     }
 
+    //add food items to food menu
     private void createFoodMenuItemList(MenuComponent foodMenu) {
         Image foodImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/food.png")));
         Image goodFoodImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/good_food.png")));
