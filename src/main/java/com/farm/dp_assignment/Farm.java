@@ -50,7 +50,6 @@ public class Farm {
     final String IDLE_BUTTON_STYLE = "-fx-background-color: #676AC2; -fx-border-color: #676AC2; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
     final String HOVERED_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #676AC2; -fx-text-fill: #676AC2; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
 
-    private FoodFactory foodFactory = new FoodFactory();
     private AnimalFood animalFood;
 
     private static Shop shop;
@@ -306,7 +305,7 @@ public class Farm {
     }
 
     public void setAddIngredientPage() {
-        animalFood = foodFactory.getAnimalFood("Normal");
+        animalFood = new Food();
 
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
