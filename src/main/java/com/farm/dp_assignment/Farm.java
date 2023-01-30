@@ -278,9 +278,7 @@ public class Farm {
         farmLayout.setAlignment(bottomMenu, Pos.BASELINE_LEFT);
 
         if (!Objects.isNull(animal)) {
-            System.out.println("asdasd");
             if (Objects.isNull(animalImageView)) {
-                System.out.println("asdasda");
                 animalImageView = new ImageView(animal.getImage());
                 animalImageView.setFitWidth(80);
                 animalImageView.setFitHeight(80);
@@ -398,6 +396,8 @@ public class Farm {
             growthPoint.setProgress(growthPoint.getProgress() + (animalFood.growthPoint() / slider.getMax()));
             growthPointBar.setProgress(growthPointBar.getProgress() + (animalFood.growthPoint() / slider.getMax()));
             this.updateCoinAmount();
+
+            animal.setGrowthPoints((int) (animal.getGrowthPoints() + animalFood.growthPoint()));
 
             if (growthPointBar.getProgress() >= 1) {
                 animal.checkConditionState();

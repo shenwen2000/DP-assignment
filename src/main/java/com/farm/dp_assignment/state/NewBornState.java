@@ -3,6 +3,9 @@ package com.farm.dp_assignment.state;
 import com.farm.dp_assignment.Animal;
 import com.farm.dp_assignment.Farm;
 import com.farm.dp_assignment.LocatedImage;
+import com.farm.dp_assignment.strategy.MoveBehavior;
+import com.farm.dp_assignment.strategy.MoveOnGround;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -17,6 +20,7 @@ public class NewBornState implements State {
     Image cowImage;
     Image goatImage;
     Farm farm;
+    ImageView imageView;
 
     public NewBornState(Animal animal) {
         farm = Farm.getInstance();
@@ -26,55 +30,49 @@ public class NewBornState implements State {
     @Override
     public void checkingCondition() {
         try {
-            if (animal.getClass().getName().equals("Chicken") && animal.getGrowthPoints() >= 5) {
+            System.out.println(animal.getClass().getName());
+            System.out.println(animal.getClass().getName().contains("Chicken"));
+            System.out.println(animal.getGrowthPoints() >= 5);
+            System.out.println(animal.getGrowthPoints());
+            if (animal.getClass().getName().contains("Chicken") && animal.getGrowthPoints() >= 5) {
                 chickenImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/chicken_2.png").toURI().toString()));
 
                 animal.setImage(chickenImage);
-                ImageView chick2ImageView = new ImageView(animal.getImage());
-
-                farm.setAnimalImageView(null);
-                farm.setAnimalImageView(chick2ImageView);
+                imageView = new ImageView(animal.getImage());
 
                 farm.getSlider().setMax(10);
-                farm.getGrowthPoint().setProgress(0);
-                farm.getGrowthPointBar().setProgress(0);
 
             } else if (animal.getClass().getName().equals("Duck") && animal.getGrowthPoints() >= 10) {
                 duckImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/duck_2.png").toURI().toString()));
                 animal.setImage(duckImage);
-                ImageView duck2ImageView = new ImageView(animal.getImage());
-
-                farm.setAnimalImageView(null);
-                farm.setAnimalImageView(duck2ImageView);
+                imageView = new ImageView(animal.getImage());
 
                 farm.getSlider().setMax(20);
-                farm.getGrowthPoint().setProgress(0);
-                farm.getGrowthPointBar().setProgress(0);
 
             } else if (animal.getClass().getName().equals("Cow") && animal.getGrowthPoints() >= 50) {
                 cowImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/cow_2.png").toURI().toString()));
                 animal.setImage(cowImage);
-                ImageView cow2ImageView = new ImageView(animal.getImage());
-
-                farm.setAnimalImageView(null);
-                farm.setAnimalImageView(cow2ImageView);
+                imageView = new ImageView(animal.getImage());
 
                 farm.getSlider().setMax(100);
-                farm.getGrowthPoint().setProgress(0);
-                farm.getGrowthPointBar().setProgress(0);
 
             } else if (animal.getClass().getName().equals("Goat") && animal.getGrowthPoints() >= 125) {
                 goatImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/goat_2.png").toURI().toString()));
                 animal.setImage(goatImage);
-                ImageView goat2ImageView = new ImageView(animal.getImage());
-
-                farm.setAnimalImageView(null);
-                farm.setAnimalImageView(goat2ImageView);
+                imageView = new ImageView(animal.getImage());
 
                 farm.getSlider().setMax(250);
-                farm.getGrowthPoint().setProgress(0);
-                farm.getGrowthPointBar().setProgress(0);
             }
+
+            farm.setAnimalImageView(null);
+            farm.setAnimalImageView(imageView);
+            imageView.setFitWidth(80);
+            imageView.setFitHeight(80);
+            MoveBehavior.translate.stop();
+            animal.setMoveBehavior(new MoveOnGround());
+            animal.performMove(imageView);
+            farm.getFarmLayout().setCenter(imageView);
+            farm.getFarmLayout().setAlignment(imageView, Pos.BOTTOM_RIGHT);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
