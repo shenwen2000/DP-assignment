@@ -4,8 +4,8 @@ import com.farm.dp_assignment.composite.Shop;
 import com.farm.dp_assignment.decorator.*;
 import com.farm.dp_assignment.simpleFactory.SimpleAnimalFactory;
 import com.farm.dp_assignment.singleton.SingletonWallet;
-import com.farm.dp_assignment.singleton.WalletFactory;
 import com.farm.dp_assignment.strategy.Idle;
+import com.farm.dp_assignment.strategy.MoveBehavior;
 import com.farm.dp_assignment.strategy.MoveOnGround;
 import com.farm.dp_assignment.strategy.Sleeping;
 import javafx.geometry.Insets;
@@ -27,22 +27,57 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Screen;
 
+import java.net.URISyntaxException;
 import java.util.Objects;
 
 public class Farm {
 
-    Stage startingScene;
+    public static Stage startingScene;
     Button startButton;
-    SimpleAnimalFactory factory = new SimpleAnimalFactory();
-    Animal animal = null;
+
+    static SimpleAnimalFactory factory;
+
+    static {
+        try {
+            factory = new SimpleAnimalFactory();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Animal animal = null;
 
     final String IDLE_BUTTON_STYLE = "-fx-background-color: #676AC2; -fx-border-color: #676AC2; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
     final String HOVERED_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #676AC2; -fx-text-fill: #676AC2; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
 
-    private FoodFactory foodFactory = new FoodFactory();
     private AnimalFood animalFood;
 
-    public static Shop shop;
+    private static Shop shop;
+
+    private static SingletonWallet wallet = SingletonWallet.getInstance();
+
+    public static double screenWidth;
+
+    private static ImageView animalImageView;
+
+    private static Slider slider;
+
+    private static ProgressBar growthPointBar;
+
+    private static ProgressIndicator growthPoint;
+
+    private static Farm uniqueFarm = new Farm();
+
+    static BorderPane farmLayout;
+
+    static Text totalCoinText;
+
+    private Farm() {
+    }
+
+    public static Farm getInstance() {
+        return uniqueFarm;
+    }
 
     public void setUpStartingPage(Stage primaryStage) {
         this.startingScene = primaryStage;
@@ -59,9 +94,9 @@ public class Farm {
         });
 
         Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
-
+        screenWidth = bounds.getWidth();
         VBox content = new VBox(15);
-        Scene scene = new Scene(content, bounds.getWidth(), bounds.getHeight());
+        Scene scene = new Scene(content, screenWidth, bounds.getHeight());
 
         startingScene.setScene(scene);
         startingScene.setX(bounds.getMinX());
@@ -71,7 +106,7 @@ public class Farm {
         Image backgroundImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/background_image.jpg")));
         ImageView backgroundImageView = new ImageView(backgroundImage);
         backgroundImageView.setFitHeight(bounds.getHeight() - 100);
-        backgroundImageView.setFitWidth(bounds.getWidth() - 100);
+        backgroundImageView.setFitWidth(screenWidth - 100);
         backgroundImageView.setPreserveRatio(true);
         content.getChildren().addAll(backgroundImageView, startButton);
         content.setAlignment(Pos.CENTER);
@@ -79,9 +114,9 @@ public class Farm {
         startingScene.show();
     }
 
-    public Scene setUpFarmPage() {
+    public static Scene setUpFarmPage() {
 
-        BorderPane farmLayout = new BorderPane();
+        farmLayout = new BorderPane();
         farmLayout.setPadding(new Insets(10, 10, 10, 10));
 
         Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
@@ -89,7 +124,7 @@ public class Farm {
         // setup background image
         farmLayout.setBackground(new Background(
                 new BackgroundImage(
-                        new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/farm.jpg"))),
+                        new Image(Objects.requireNonNull(Farm.class.getResourceAsStream("image/farm.jpg"))),
                         BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
                         new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true),
                         new BackgroundSize(BackgroundSize.AUTO, bounds.getHeight() - 100, true, true, false, true)
@@ -118,34 +153,35 @@ public class Farm {
         StackPane stageGrowth = new StackPane();
         stageGrowth.getChildren().addAll(circle, stageNumber);
 
-        ProgressBar growthPointBar = new ProgressBar();
-        ProgressIndicator growthPoint = new ProgressIndicator(0);
+        if (Objects.isNull(growthPointBar)) {
+            slider = new Slider();
+            slider.setMin(0);
+            slider.setMax(5);
 
-//         Here are the code to change the value of the progress bar
-        growthPointBar.setProgress(20 / 50);
-        growthPoint.setProgress(20 / 50);
-
-        growthProgressBox.getChildren().addAll(stageGrowth, growthPointBar, growthPoint);
-        growthProgressBox.setAlignment(Pos.BASELINE_LEFT);
+            growthPointBar = new ProgressBar(0);
+            growthPoint = new ProgressIndicator(0);
+            growthProgressBox.getChildren().addAll(stageGrowth, growthPointBar, growthPoint);
+            growthProgressBox.setAlignment(Pos.BASELINE_LEFT);
+        } else {
+            growthPointBar.setProgress(growthPointBar.getProgress());
+            growthPoint.setProgress(growthPoint.getProgress());
+        }
 
         // setup coin (wallet)
         // create coin image
-        Image coinImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/coin.png")));
+        Image coinImage = new Image(Objects.requireNonNull(Farm.class.getResourceAsStream("image/coin.png")));
         ImageView coinImageView = new ImageView(coinImage);
         coinImageView.setFitWidth(60);
         coinImageView.setFitHeight(60);
 
         HBox coinBox = new HBox(5);
 
-        //WalletFactory
-        WalletFactory walletFactory = new WalletFactory();
+        wallet = SingletonWallet.getInstance();
 
-        // Singleton wallet
-        SingletonWallet wallet = walletFactory.getWallet();
         int totalCoin = wallet.getTotalAmount();
 
         String totalCoinStr = Integer.toString(totalCoin);
-        Text totalCoinText = new Text(totalCoinStr);
+        totalCoinText = new Text(totalCoinStr);
         totalCoinText.setStyle("-fx-font-size: 25px; -fx-font-vertical-align:top");
         totalCoinText.setBoundsType(TextBoundsType.VISUAL);
 
@@ -163,11 +199,10 @@ public class Farm {
         farmLayout.setTop(topSec);
         farmLayout.setAlignment(topSec, Pos.BOTTOM_LEFT);
 
-
         // Set up action button
         //Idle
         Button idleButton = new Button();
-        Image idleImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/donald_duck_idle.png")));
+        Image idleImage = new Image(Objects.requireNonNull(Farm.class.getResourceAsStream("image/donald_duck_idle.png")));
         ImageView idleImageView = new ImageView(idleImage);
         idleImageView.setFitHeight(80);
         idleImageView.setFitWidth(80);
@@ -175,13 +210,17 @@ public class Farm {
         idleButton.setGraphic(idleImageView);
         idleButton.setStyle("-fx-cursor: hand;");
         idleButton.setTooltip(new Tooltip("Set movement of animal to idle."));
+
         idleButton.setOnAction(e -> {
-                this.animal.setMoveBehavior(new Idle());
-            });
+            if (!Objects.isNull(animal)) {
+                animal.setMoveBehavior(new Idle());
+                animal.performMove(new ImageView(animal.getImage()));
+            }
+        });
 
         // move
         Button moveButton = new Button();
-        Image movementImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/donald_duck_move.gif")));
+        Image movementImage = new Image(Objects.requireNonNull(Farm.class.getResourceAsStream("image/donald_duck_move.gif")));
         ImageView movementImageView = new ImageView(movementImage);
         movementImageView.setFitHeight(80);
         movementImageView.setFitWidth(80);
@@ -189,12 +228,17 @@ public class Farm {
         moveButton.setGraphic(movementImageView);
         moveButton.setStyle("-fx-cursor: hand;");
         moveButton.setTooltip(new Tooltip("Set movement of animal to move."));
+
         moveButton.setOnAction(e -> {
-                this.animal.setMoveBehavior(new MoveOnGround());
-            });
+            if (!Objects.isNull(animal)) {
+                animal.setMoveBehavior(new MoveOnGround());
+                animal.performMove(new ImageView(animal.getImage()));
+            }
+        });
+
         // Sleep
         Button sleepButton = new Button();
-        Image sleepImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/donald_duck_sleep.gif")));
+        Image sleepImage = new Image(Objects.requireNonNull(Farm.class.getResourceAsStream("image/donald_duck_sleep.gif")));
         ImageView sleepImageView = new ImageView(sleepImage);
         sleepImageView.setFitHeight(80);
         sleepImageView.setFitWidth(80);
@@ -202,28 +246,17 @@ public class Farm {
         sleepButton.setGraphic(sleepImageView);
         sleepButton.setStyle("-fx-cursor: hand;");
         sleepButton.setTooltip(new Tooltip("Set movement of animal to sleep."));
-        sleepButton.setOnAction(e -> {
-                this.animal.setMoveBehavior(new Sleeping());
-            });
 
-//        if (sleepButton.isPressed()){
-//            sleepButton.setOnAction(e -> {
-//                this.animal.setMoveBehavior(new Sleeping());
-//            });
-//        }
-//        else if (idleButton.isPressed()){
-//            idleButton.setOnAction(e -> {
-//                this.animal.setMoveBehavior(new Idle());
-//            });
-//        }
-//        else if (moveButton.isPressed()){
-//            moveButton.setOnAction(e -> {
-//                this.animal.setMoveBehavior(new MoveOnGround());
-//            });
-//        }
+        sleepButton.setOnAction(e -> {
+            if (!Objects.isNull(animal)) {
+                animal.setMoveBehavior(new Sleeping());
+                animal.performMove(new ImageView(animal.getImage()));
+            }
+        });
+
         //Set up shop
         Button shopButton = new Button();
-        Image shopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/shop.png")));
+        Image shopImage = new Image(Objects.requireNonNull(Farm.class.getResourceAsStream("image/shop.png")));
         ImageView shopImageView = new ImageView(shopImage);
         shopImageView.setFitHeight(80);
         shopImageView.setFitWidth(80);
@@ -245,12 +278,18 @@ public class Farm {
         farmLayout.setAlignment(bottomMenu, Pos.BASELINE_LEFT);
 
         if (!Objects.isNull(animal)) {
-            ImageView animalImageView = new ImageView(animal.getImage());
-            animalImageView.setFitWidth(80);
-            animalImageView.setFitHeight(80);
-            animal.performMove(animalImageView);
-            farmLayout.setCenter(animalImageView);
-            farmLayout.setAlignment(animalImageView, Pos.BOTTOM_RIGHT);
+            if (Objects.isNull(animalImageView)) {
+                animalImageView = new ImageView(animal.getImage());
+                animalImageView.setFitWidth(80);
+                animalImageView.setFitHeight(80);
+                animal.performMove(animalImageView);
+                farmLayout.setCenter(animalImageView);
+                farmLayout.setAlignment(animalImageView, Pos.BOTTOM_RIGHT);
+            } else {
+                animalImageView.setImage(null);
+                animalImageView.setImage(animal.getImage());
+            }
+
         }
 
         Scene scene = new Scene(farmLayout, bounds.getWidth(), bounds.getHeight());
@@ -258,13 +297,14 @@ public class Farm {
         return scene;
     }
 
-    public void createAnimal(String nameType) {
+    public static void createAnimal(String nameType) {
         animal = factory.createAnimal(nameType);
+        MoveBehavior.translate.stop();
         refreshFarmPage();
     }
 
     public void setAddIngredientPage() {
-        animalFood = foodFactory.getAnimalFood("Normal");
+        animalFood = new Food();
 
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
@@ -283,7 +323,7 @@ public class Farm {
         addedIngredientListText.setBoundsType(TextBoundsType.VISUAL);
         addedIngredientListText.setTextAlignment(TextAlignment.LEFT);
 
-        Text priceText = new Text("Price:5");
+        Text priceText = new Text("Price:2");
         priceText.setStyle("-fx-font-size: 15px; -fx-font-weight: bold");
         priceText.setBoundsType(TextBoundsType.VISUAL);
         priceText.setTextAlignment(TextAlignment.LEFT);
@@ -305,6 +345,12 @@ public class Farm {
         proteinImageView.setFitWidth(100);
         proteinImageView.setFitHeight(100);
         proteinButton.setStyle("-fx-cursor: hand;");
+
+        proteinButton.setOnAction(e -> {
+            animalFood = new Protein(animalFood);
+            addedIngredientListText.setText(animalFood.getDescription());
+            priceText.setText("Price:" + String.valueOf(animalFood.cost()));
+        });
 
         // create vitamin button
         Button vitaminButton = new Button();
@@ -344,8 +390,18 @@ public class Farm {
         confirmBtn.setOnMouseExited(e -> confirmBtn.setStyle(IDLE_BUTTON_STYLE));
         confirmBtn.setAlignment(Pos.BASELINE_RIGHT);
 
+        // set the action at here
         confirmBtn.setOnAction(e -> {
-            // set the action at here
+            wallet.deductAmount(animalFood.cost());
+            growthPoint.setProgress(growthPoint.getProgress() + (animalFood.growthPoint() / slider.getMax()));
+            growthPointBar.setProgress(growthPointBar.getProgress() + (animalFood.growthPoint() / slider.getMax()));
+            this.updateCoinAmount();
+
+            animal.setGrowthPoints((int) (animal.getGrowthPoints() + animalFood.growthPoint()));
+
+            if (growthPointBar.getProgress() >= 1) {
+                animal.checkConditionState();
+            }
             window.close();
         });
 
@@ -361,16 +417,60 @@ public class Farm {
         window.showAndWait();
     }
 
-    public void refreshFarmPage() {
-        this.startingScene = Main.primaryStage;
-        this.startingScene.setScene(setUpFarmPage());
+    public static void refreshFarmPage() {
+        startingScene = Main.primaryStage;
+        startingScene.setScene(setUpFarmPage());
+    }
+
+    public BorderPane getFarmLayout() {
+        return farmLayout;
+    }
+
+    public void updateCoinAmount() {
+        totalCoinText.setText(String.valueOf(wallet.getTotalAmount()));
+    }
+
+    public Animal getAnimal() {
+        return animal;
+    }
+
+    public void setAnimal(Animal animal) {
+        this.animal = animal;
+    }
+
+    public Slider getSlider() {
+        return slider;
+    }
+
+    public ProgressBar getGrowthPointBar() {
+        return growthPointBar;
+    }
+
+    public ProgressIndicator getGrowthPoint() {
+        return growthPoint;
+    }
+
+    public void setSlider(Slider slider) {
+        this.slider = slider;
+    }
+
+    public void setGrowthPointBar(ProgressBar growthPointBar) {
+        this.growthPointBar = growthPointBar;
+    }
+
+    public void setGrowthPoint(ProgressIndicator growthPoint) {
+        this.growthPoint = growthPoint;
     }
 
     public Shop getShop() {
         return shop;
     }
 
-    public void setShop(Shop shop) {
-        this.shop = shop;
+    public ImageView getAnimalImageView() {
+        return animalImageView;
+    }
+
+    public void setAnimalImageView(ImageView animalImageView) {
+        this.animalImageView = animalImageView;
     }
 }

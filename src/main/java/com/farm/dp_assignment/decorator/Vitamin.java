@@ -9,11 +9,16 @@ public class Vitamin extends FoodDecorator {
     }
 
     public String getDescription() {
-        return "\n1 scoop of vitamin is added to " + animalFood.getDescription();
+        return "\nVitamin * 1" + animalFood.getDescription();
     }
 
     @Override
     public Integer cost() {
         return animalFood.cost() + 1;
+    }
+
+    @Override
+    public Double growthPoint() {
+        return animalFood.growthPoint() + 1.00;
     }
 }

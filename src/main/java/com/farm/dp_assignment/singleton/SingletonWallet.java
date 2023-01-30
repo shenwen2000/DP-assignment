@@ -1,8 +1,8 @@
 package com.farm.dp_assignment.singleton;
 
 public class SingletonWallet implements Wallet {
-    private int totalAmount = 5;
-    private static SingletonWallet uniqueWallet = new SingletonWallet();
+    private int totalAmount = 1000;  //starting wallet amount
+    private static SingletonWallet uniqueWallet = new SingletonWallet();  //make sure only one instance created
 
     private SingletonWallet() {
     }
@@ -11,20 +11,25 @@ public class SingletonWallet implements Wallet {
         return uniqueWallet;
     }
 
+    //deduct wallet amount and make sure wallet amount not negative
     @Override
-    public void deductAmount(int amount) {
+    public boolean deductAmount(int amount) {
         int tempTotalAmount = totalAmount;
         tempTotalAmount -= amount;
         if (tempTotalAmount >= 0) {
             totalAmount = tempTotalAmount;
+            return true;
         }
+        return false;
     }
 
+    //add wallet amount
     @Override
     public void addAmount(int amount) {
         totalAmount += amount;
     }
 
+    //get wallet amount
     public int getTotalAmount() {
         return totalAmount;
     }

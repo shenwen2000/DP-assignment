@@ -9,4 +9,6 @@ public abstract class AnimalFood {
     }
 
     public abstract Integer cost();
+
+    public abstract Double growthPoint();
 }
