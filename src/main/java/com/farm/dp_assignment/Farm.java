@@ -4,13 +4,10 @@ import com.farm.dp_assignment.composite.Shop;
 import com.farm.dp_assignment.decorator.*;
 import com.farm.dp_assignment.simpleFactory.SimpleAnimalFactory;
 import com.farm.dp_assignment.singleton.SingletonWallet;
-import com.farm.dp_assignment.singleton.WalletFactory;
 import com.farm.dp_assignment.strategy.Idle;
 import com.farm.dp_assignment.strategy.MoveBehavior;
 import com.farm.dp_assignment.strategy.MoveOnGround;
 import com.farm.dp_assignment.strategy.Sleeping;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -58,7 +55,7 @@ public class Farm {
 
     private static Shop shop;
 
-    private static SingletonWallet wallet;
+    private static SingletonWallet wallet = SingletonWallet.getInstance();
 
     public static double screenWidth;
 
@@ -180,9 +177,7 @@ public class Farm {
 
         HBox coinBox = new HBox(5);
 
-        //WalletFactory
-        WalletFactory walletFactory = new WalletFactory();
-        wallet = walletFactory.getWallet();
+        wallet = SingletonWallet.getInstance();
 
         int totalCoin = wallet.getTotalAmount();
 

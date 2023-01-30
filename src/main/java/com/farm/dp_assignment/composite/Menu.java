@@ -53,6 +53,7 @@ public class Menu extends MenuComponent {
         this.type = type;
     }
 
+    //print the whole menu with the items in the menu
     public VBox print(VBox vBox, MenuComponent menuComponent) {
         Iterator<MenuComponent> menuIterator = menuComponents.iterator();
 
@@ -89,6 +90,7 @@ public class Menu extends MenuComponent {
 
         menuVbox.getChildren().addAll(shopBoxWithDashLine);
 
+        //iterate through each menu component
         while (menuIterator.hasNext()) {
             MenuComponent menu = menuIterator.next();
             VBox tempVbox = new VBox(10);
