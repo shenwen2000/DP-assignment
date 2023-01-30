@@ -15,12 +15,6 @@ public class SoldState implements State {
     //Sold
     @Override
     public void checkingCondition() {
-        farm.setSlider(null);
-        farm.setGrowthPoint(null);
-        farm.setGrowthPointBar(null);
-        animal.setImage(null);
-        farm.setAnimalImageView(null);
-        farm.setAnimal(null);
         farm.getFarmLayout().setCenter(null);
     }
 }

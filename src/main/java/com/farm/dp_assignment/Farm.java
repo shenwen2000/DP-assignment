@@ -33,6 +33,7 @@ import java.util.Objects;
 public class Farm {
 
     public static Stage startingScene;
+
     Button startButton;
 
     static SimpleAnimalFactory factory;
@@ -363,6 +364,7 @@ public class Farm {
         vitaminImageView.setFitHeight(100);
         vitaminButton.setStyle("-fx-cursor: hand;");
 
+        // action of the vitamin button
         vitaminButton.setOnAction(e -> {
             animalFood = new Vitamin(animalFood);
             addedIngredientListText.setText(animalFood.getDescription());

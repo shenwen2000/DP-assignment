@@ -15,6 +15,4 @@ public class Food extends AnimalFood {
     public Double growthPoint() {
         return 1.00;
     }
-
-
 }

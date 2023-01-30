@@ -72,6 +72,12 @@ public class FullyGrownState implements State {
             change = true;
             //Sell the animal
             if (change) {
+                farm.setSlider(null);
+                farm.setGrowthPoint(null);
+                farm.setGrowthPointBar(null);
+                animal.setImage(null);
+                farm.setAnimalImageView(null);
+                farm.setAnimal(null);
                 wallet.addAmount(coin);
                 animal.setState(new SoldState(animal));
                 animal.checkConditionState();
