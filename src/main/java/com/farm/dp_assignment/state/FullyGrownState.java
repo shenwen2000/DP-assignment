@@ -22,12 +22,14 @@ public class FullyGrownState implements State {
     SingletonWallet wallet;
     int coin = 0;
 
+    //Constructor
     public FullyGrownState(Animal animal) {
         farm = Farm.getInstance();
         this.animal = animal;
         wallet = SingletonWallet.getInstance();
     }
 
+    //Check coin amount to earn after selling the animal
     @Override
     public void checkingCondition() {
         if (animal.getType().equals("Chicken")) {
@@ -68,10 +70,12 @@ public class FullyGrownState implements State {
 
         okayBtn.setOnAction(e -> {
             change = true;
+            //Sell the animal
             if (change) {
                 wallet.addAmount(coin);
                 animal.setState(new SoldState(animal));
                 animal.checkConditionState();
+                farm.updateCoinAmount();
                 window.close();
             }
         });

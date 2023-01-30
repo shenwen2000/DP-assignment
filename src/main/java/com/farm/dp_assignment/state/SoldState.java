@@ -12,6 +12,7 @@ public class SoldState implements State {
         farm = Farm.getInstance();
     }
 
+    //Sold
     @Override
     public void checkingCondition() {
         farm.setSlider(null);

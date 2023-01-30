@@ -23,12 +23,13 @@ public class NewBornState implements State {
     ImageView imageView;
 
     boolean change = false;
-
+    //Constructor
     public NewBornState(Animal animal) {
         farm = Farm.getInstance();
         this.animal = animal;
     }
 
+    //Check if growth point is enough to evolve to Young state
     @Override
     public void checkingCondition() {
         try {
@@ -61,7 +62,7 @@ public class NewBornState implements State {
                 farm.getSlider().setMax(250);
                 change = true;
             }
-
+            // evolve to Young state and update the page
             if (change) {
                 farm.getGrowthPoint().setProgress(0);
                 farm.getGrowthPointBar().setProgress(0);
