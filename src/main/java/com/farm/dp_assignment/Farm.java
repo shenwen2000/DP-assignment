@@ -28,14 +28,15 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Screen;
 
+import java.net.URISyntaxException;
 import java.util.Objects;
 
 public class Farm {
 
-    Stage startingScene;
+    public static Stage startingScene;
     Button startButton;
     SimpleAnimalFactory factory = new SimpleAnimalFactory();
-    Animal animal = null;
+    public static Animal animal = null;
 
     final String IDLE_BUTTON_STYLE = "-fx-background-color: #676AC2; -fx-border-color: #676AC2; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
     final String HOVERED_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #676AC2; -fx-text-fill: #676AC2; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
@@ -45,9 +46,14 @@ public class Farm {
 
     public static Shop shop;
 
-    private SingletonWallet wallet;
+    private static SingletonWallet wallet;
 
     public static double screenWidth;
+
+    private static ImageView animalImageView;
+
+    public Farm() throws URISyntaxException {
+    }
 
     public void setUpStartingPage(Stage primaryStage) {
         this.startingScene = primaryStage;
@@ -84,7 +90,7 @@ public class Farm {
         startingScene.show();
     }
 
-    public Scene setUpFarmPage() {
+    public static Scene setUpFarmPage() {
 
         BorderPane farmLayout = new BorderPane();
         farmLayout.setPadding(new Insets(10, 10, 10, 10));
@@ -94,7 +100,7 @@ public class Farm {
         // setup background image
         farmLayout.setBackground(new Background(
                 new BackgroundImage(
-                        new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/farm.jpg"))),
+                        new Image(Objects.requireNonNull(Farm.class.getResourceAsStream("image/farm.jpg"))),
                         BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
                         new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true),
                         new BackgroundSize(BackgroundSize.AUTO, bounds.getHeight() - 100, true, true, false, true)
@@ -135,7 +141,7 @@ public class Farm {
 
         // setup coin (wallet)
         // create coin image
-        Image coinImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/coin.png")));
+        Image coinImage = new Image(Objects.requireNonNull(Farm.class.getResourceAsStream("image/coin.png")));
         ImageView coinImageView = new ImageView(coinImage);
         coinImageView.setFitWidth(60);
         coinImageView.setFitHeight(60);
@@ -171,7 +177,7 @@ public class Farm {
         // Set up action button
         //Idle
         Button idleButton = new Button();
-        Image idleImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/donald_duck_idle.png")));
+        Image idleImage = new Image(Objects.requireNonNull(Farm.class.getResourceAsStream("image/donald_duck_idle.png")));
         ImageView idleImageView = new ImageView(idleImage);
         idleImageView.setFitHeight(80);
         idleImageView.setFitWidth(80);
@@ -181,15 +187,15 @@ public class Farm {
         idleButton.setTooltip(new Tooltip("Set movement of animal to idle."));
 
         idleButton.setOnAction(e -> {
-            if (!Objects.isNull(this.animal)) {
-                this.animal.setMoveBehavior(new Idle());
-                this.animal.performMove(new ImageView(this.animal.getImage()));
+            if (!Objects.isNull(animal)) {
+                animal.setMoveBehavior(new Idle());
+                animal.performMove(new ImageView(animal.getImage()));
             }
         });
 
         // move
         Button moveButton = new Button();
-        Image movementImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/donald_duck_move.gif")));
+        Image movementImage = new Image(Objects.requireNonNull(Farm.class.getResourceAsStream("image/donald_duck_move.gif")));
         ImageView movementImageView = new ImageView(movementImage);
         movementImageView.setFitHeight(80);
         movementImageView.setFitWidth(80);
@@ -199,15 +205,15 @@ public class Farm {
         moveButton.setTooltip(new Tooltip("Set movement of animal to move."));
 
         moveButton.setOnAction(e -> {
-            if (!Objects.isNull(this.animal)) {
-                this.animal.setMoveBehavior(new MoveOnGround());
-                this.animal.performMove(new ImageView(this.animal.getImage()));
+            if (!Objects.isNull(animal)) {
+                animal.setMoveBehavior(new MoveOnGround());
+                animal.performMove(new ImageView(animal.getImage()));
             }
         });
 
         // Sleep
         Button sleepButton = new Button();
-        Image sleepImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/donald_duck_sleep.gif")));
+        Image sleepImage = new Image(Objects.requireNonNull(Farm.class.getResourceAsStream("image/donald_duck_sleep.gif")));
         ImageView sleepImageView = new ImageView(sleepImage);
         sleepImageView.setFitHeight(80);
         sleepImageView.setFitWidth(80);
@@ -217,12 +223,15 @@ public class Farm {
         sleepButton.setTooltip(new Tooltip("Set movement of animal to sleep."));
 
         sleepButton.setOnAction(e -> {
-
+            if (!Objects.isNull(animal)) {
+                animal.setMoveBehavior(new Sleeping());
+                animal.performMove(new ImageView(animal.getImage()));
+            }
         });
 
         //Set up shop
         Button shopButton = new Button();
-        Image shopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/shop.png")));
+        Image shopImage = new Image(Objects.requireNonNull(Farm.class.getResourceAsStream("image/shop.png")));
         ImageView shopImageView = new ImageView(shopImage);
         shopImageView.setFitHeight(80);
         shopImageView.setFitWidth(80);
@@ -244,12 +253,20 @@ public class Farm {
         farmLayout.setAlignment(bottomMenu, Pos.BASELINE_LEFT);
 
         if (!Objects.isNull(animal)) {
-            ImageView animalImageView = new ImageView(animal.getImage());
-            animalImageView.setFitWidth(80);
-            animalImageView.setFitHeight(80);
-            animal.performMove(animalImageView);
-            farmLayout.setCenter(animalImageView);
-            farmLayout.setAlignment(animalImageView, Pos.BOTTOM_RIGHT);
+            String[] pathArr = ((LocatedImage) animal.getImage()).getURL().split("/");
+            String[] imageNameArr = pathArr[pathArr.length - 1].split("\\.");
+
+            if (Objects.isNull(animalImageView)) {
+                animalImageView = new ImageView(animal.getImage());
+                animalImageView.setFitWidth(80);
+                animalImageView.setFitHeight(80);
+                animal.performMove(animalImageView);
+                farmLayout.setCenter(animalImageView);
+                farmLayout.setAlignment(animalImageView, Pos.BOTTOM_RIGHT);
+            } else {
+                animalImageView.setImage(null);
+                animalImageView.setImage(animal.getImage());
+            }
         }
 
         Scene scene = new Scene(farmLayout, bounds.getWidth(), bounds.getHeight());
@@ -350,8 +367,8 @@ public class Farm {
         confirmBtn.setOnMouseExited(e -> confirmBtn.setStyle(IDLE_BUTTON_STYLE));
         confirmBtn.setAlignment(Pos.BASELINE_RIGHT);
 
-            // set the action at here
-            confirmBtn.setOnAction(e -> {
+        // set the action at here
+        confirmBtn.setOnAction(e -> {
 //                //WalletFactory
 //                WalletFactory walletFactory = new WalletFactory();
 //
@@ -360,8 +377,8 @@ public class Farm {
 //                int totalCoin = wallet.getTotalAmount();
 //               totalCoin= totalCoin- animalFood.cost();
 
-                window.close();
-            });
+            window.close();
+        });
 
 
         ingredientPageLayout.setTop(titleText);
@@ -376,16 +393,8 @@ public class Farm {
         window.showAndWait();
     }
 
-    public void refreshFarmPage() {
-        this.startingScene = Main.primaryStage;
-        this.startingScene.setScene(setUpFarmPage());
-    }
-
-    public Shop getShop() {
-        return shop;
-    }
-
-    public void setShop(Shop shop) {
-        this.shop = shop;
+    public static void refreshFarmPage() {
+        startingScene = Main.primaryStage;
+        startingScene.setScene(setUpFarmPage());
     }
 }
