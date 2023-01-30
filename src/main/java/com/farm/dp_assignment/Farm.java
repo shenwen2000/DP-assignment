@@ -45,7 +45,7 @@ public class Farm {
 
     public static Shop shop;
 
-    private SingletonWallet wallet;
+    private SingletonWallet wallet = SingletonWallet.getInstance();;
 
     public static double screenWidth;
 
@@ -142,11 +142,6 @@ public class Farm {
 
         HBox coinBox = new HBox(5);
 
-        //WalletFactory
-        WalletFactory walletFactory = new WalletFactory();
-
-        // Singleton wallet
-        wallet = walletFactory.getWallet();
         int totalCoin = wallet.getTotalAmount();
 
         String totalCoinStr = Integer.toString(totalCoin);
