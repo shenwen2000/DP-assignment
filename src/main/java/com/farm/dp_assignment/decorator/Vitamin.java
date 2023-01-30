@@ -16,4 +16,9 @@ public class Vitamin extends FoodDecorator {
     public Integer cost() {
         return animalFood.cost() + 1;
     }
+
+    @Override
+    public Double growthPoint() {
+        return animalFood.growthPoint() + 0.02;
+    }
 }

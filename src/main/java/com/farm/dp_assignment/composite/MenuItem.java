@@ -16,6 +16,7 @@ import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.net.URISyntaxException;
 import java.util.Objects;
 
 public class MenuItem extends MenuComponent {
@@ -217,13 +218,23 @@ public class MenuItem extends MenuComponent {
                         setAlertMsg(getLocked() ? "Unlock" : "Buy", getType());
                     }
                 } else {
-                    Farm farm = new Farm();
+                    Farm farm = null;
+                    try {
+                        farm = new Farm();
+                    } catch (URISyntaxException ex) {
+                        ex.printStackTrace();
+                    }
                     wallet.deductAmount(getPrice());
                     farm.createAnimal(getName());
                 }
             } else {
                 if (getName().equals("Premium food")) {
-                    Farm farm = new Farm();
+                    Farm farm = null;
+                    try {
+                        farm = new Farm();
+                    } catch (URISyntaxException ex) {
+                        ex.printStackTrace();
+                    }
                     farm.setAddIngredientPage();
                 }
             }
