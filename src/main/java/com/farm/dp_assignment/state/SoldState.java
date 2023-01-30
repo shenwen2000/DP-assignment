@@ -6,13 +6,15 @@ import com.farm.dp_assignment.Farm;
 public class SoldState implements State {
     Animal animal;
     Farm farm;
-    public SoldState(Animal animal) {
-        this.animal = animal;
+    public SoldState() {
+        animal=null;
     }
 
     @Override
     public void checkingCondition() {
         farm.setSlider(null);
+        farm.setAnimal(null);
+        animal.setImage(null);
         farm.setAnimalImageView(null);
     }
 
