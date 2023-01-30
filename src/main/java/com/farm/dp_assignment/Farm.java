@@ -291,6 +291,7 @@ public class Farm {
                 animalImageView.setImage(null);
                 animalImageView.setImage(animal.getImage());
             }
+
         }
 
         Scene scene = new Scene(farmLayout, bounds.getWidth(), bounds.getHeight());
