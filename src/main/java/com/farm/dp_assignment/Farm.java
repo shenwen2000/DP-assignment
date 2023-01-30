@@ -350,16 +350,18 @@ public class Farm {
         confirmBtn.setOnMouseExited(e -> confirmBtn.setStyle(IDLE_BUTTON_STYLE));
         confirmBtn.setAlignment(Pos.BASELINE_RIGHT);
 
+        WalletFactory walletFactory = new WalletFactory();
+        SingletonWallet wallet = walletFactory.getWallet();
+        ProgressBar growthPointBar = new ProgressBar();
+        ProgressIndicator growthPoint = new ProgressIndicator(0);
+
             // set the action at here
             confirmBtn.setOnAction(e -> {
-//                //WalletFactory
-//                WalletFactory walletFactory = new WalletFactory();
-//
-//                // Singleton wallet
-//                SingletonWallet wallet = walletFactory.getWallet();
-//                int totalCoin = wallet.getTotalAmount();
-//               totalCoin= totalCoin- animalFood.cost();
+               wallet.deductAmount(animalFood.cost());
+//                growthPointBar.setProgress(0.1);
+//                growthPoint.setProgress(0.1);
 
+                this.refreshFarmPage();
                 window.close();
             });
 
