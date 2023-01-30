@@ -19,7 +19,8 @@ import java.net.URISyntaxException;
 import java.util.Objects;
 
 public class MenuItem extends MenuComponent {
-
+    SingletonWallet wallet = SingletonWallet.getInstance();
+    Farm farm = Farm.getInstance();
     String name;
     Boolean isLocked;
     int price;
@@ -194,12 +195,11 @@ public class MenuItem extends MenuComponent {
         Button cancelButton = new Button("Cancel");
         cancelButton.setStyle(IDLE_CANCEL_STYLE);
 
-//        WalletFactory walletFactory = new WalletFactory();
-        SingletonWallet wallet = SingletonWallet.getInstance();
+
 
         // Get the wallet amount and check enuf or not, then unlock
         confirmButton.setOnAction(e -> {
-            Farm farm = Farm.getInstance();
+
             if (getType().equals("Animal")) {
                 if (getLocked()) {
                     if (wallet.getTotalAmount() >= getPrice()) {
@@ -220,13 +220,11 @@ public class MenuItem extends MenuComponent {
                         setAlertMsg(getLocked() ? "Unlock" : "Buy", getType());
                     }
                 } else {
-                    wallet.deductAmount(getPrice());
-                    farm.setAnimal(null);
-                    farm.setSlider(null);
-                    farm.setGrowthPointBar(null);
-                    farm.setGrowthPoint(null);
-                    farm.setAnimalImageView(null);
-                    farm.createAnimal(getName());
+                    if (Objects.isNull(farm.getAnimal())){
+                        buyAnimal();
+                    } else {
+                        confirmChgAnimal();
+                    }
                 }
             } else {
                 if (getName().equals("Premium food")) {
@@ -284,5 +282,67 @@ public class MenuItem extends MenuComponent {
         Scene scene = new Scene(alertLayout);
         window.setScene(scene);
         window.showAndWait();
+    }
+
+    private void confirmChgAnimal(){
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+
+        window.setTitle("Change animal");
+
+        window.setMaxWidth(400);
+        window.setMaxHeight(400);
+
+        BorderPane farmLayout = new BorderPane();
+        farmLayout.setPadding(new Insets(10, 10, 10, 10));
+
+        VBox content = new VBox(10);
+
+        Text confirmChgMsg = new Text("You have already bought an animal and it is not ready to sell yet." +
+                "\nAre you sure to replace it with new " + getName() +
+                "?\nNOTE: The growth progress cannot be transferred to new animal.");
+        confirmChgMsg.setStyle("-fx-font-size: 15px; -fx-font-vertical-align:top");
+        confirmChgMsg.setBoundsType(TextBoundsType.VISUAL);
+
+        FlowPane flowPane = new FlowPane();
+        flowPane.setVgap(8);
+        flowPane.setHgap(12);
+
+        Button confirmButton = new Button("Confirm");
+        confirmButton.setStyle(IDLE_BUTTON_STYLE);
+        confirmButton.setOnMouseEntered(e -> confirmButton.setStyle(HOVERED_BUTTON_STYLE));
+        confirmButton.setOnMouseExited(e -> confirmButton.setStyle(IDLE_BUTTON_STYLE));
+
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setStyle(IDLE_CANCEL_STYLE);
+
+        confirmButton.setOnAction(e -> {
+            buyAnimal();
+            window.close();
+        });
+
+        cancelButton.setOnAction(e -> {
+            window.close();
+        });
+
+        flowPane.getChildren().addAll(confirmButton, cancelButton);
+        flowPane.setAlignment(Pos.CENTER);
+        content.getChildren().addAll(confirmChgMsg, flowPane);
+        farmLayout.setCenter(content);
+        farmLayout.setAlignment(content, Pos.TOP_LEFT);
+
+        Scene scene = new Scene(farmLayout);
+        window.setScene(scene);
+        window.showAndWait();
+    }
+
+    private void buyAnimal(){
+        wallet.deductAmount(getPrice());
+        farm.setAnimal(null);
+        farm.setSlider(null);
+        farm.setGrowthPointBar(null);
+        farm.setGrowthPoint(null);
+        farm.setAnimalImageView(null);
+        farm.createAnimal(getName());
     }
 }
