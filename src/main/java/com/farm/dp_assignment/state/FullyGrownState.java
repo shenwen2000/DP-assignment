@@ -2,6 +2,7 @@ package com.farm.dp_assignment.state;
 
 import com.farm.dp_assignment.Animal;
 import com.farm.dp_assignment.Farm;
+import com.farm.dp_assignment.singleton.SingletonWallet;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,10 +20,12 @@ public class FullyGrownState implements State {
     final String IDLE_BUTTON_STYLE = "-fx-background-color: #676AC2; -fx-border-color: #676AC2; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
     final String HOVERED_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #676AC2; -fx-text-fill: #676AC2; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
     boolean change = false;
+    SingletonWallet wallet;
 
     public FullyGrownState(Animal animal) {
         farm = Farm.getInstance();
         this.animal = animal;
+        wallet= SingletonWallet.getInstance();
     }
 
     @Override
@@ -71,6 +74,8 @@ public class FullyGrownState implements State {
                 farm.setAnimal(null);
                 animal.setImage(null);
                 animal.setType(null);
+                wallet.addAmount(coin);
+                System.out.println(wallet.getTotalAmount());
                 animal.setState(new SoldState());
                 window.close();
             }
