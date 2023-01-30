@@ -175,6 +175,9 @@ public class Farm {
         idleButton.setGraphic(idleImageView);
         idleButton.setStyle("-fx-cursor: hand;");
         idleButton.setTooltip(new Tooltip("Set movement of animal to idle."));
+        idleButton.setOnAction(e -> {
+                this.animal.setMoveBehavior(new Idle());
+            });
 
         // move
         Button moveButton = new Button();
@@ -186,7 +189,9 @@ public class Farm {
         moveButton.setGraphic(movementImageView);
         moveButton.setStyle("-fx-cursor: hand;");
         moveButton.setTooltip(new Tooltip("Set movement of animal to move."));
-
+        moveButton.setOnAction(e -> {
+                this.animal.setMoveBehavior(new MoveOnGround());
+            });
         // Sleep
         Button sleepButton = new Button();
         Image sleepImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/donald_duck_sleep.gif")));
@@ -197,22 +202,25 @@ public class Farm {
         sleepButton.setGraphic(sleepImageView);
         sleepButton.setStyle("-fx-cursor: hand;");
         sleepButton.setTooltip(new Tooltip("Set movement of animal to sleep."));
-
-        if (sleepButton.isPressed()){
-            sleepButton.setOnAction(e -> {
+        sleepButton.setOnAction(e -> {
                 this.animal.setMoveBehavior(new Sleeping());
             });
-        }
-        else if (idleButton.isPressed()){
-            idleButton.setOnAction(e -> {
-                this.animal.setMoveBehavior(new Idle());
-            });
-        }
-        else if (moveButton.isPressed()){
-            moveButton.setOnAction(e -> {
-                this.animal.setMoveBehavior(new MoveOnGround());
-            });
-        }
+
+//        if (sleepButton.isPressed()){
+//            sleepButton.setOnAction(e -> {
+//                this.animal.setMoveBehavior(new Sleeping());
+//            });
+//        }
+//        else if (idleButton.isPressed()){
+//            idleButton.setOnAction(e -> {
+//                this.animal.setMoveBehavior(new Idle());
+//            });
+//        }
+//        else if (moveButton.isPressed()){
+//            moveButton.setOnAction(e -> {
+//                this.animal.setMoveBehavior(new MoveOnGround());
+//            });
+//        }
         //Set up shop
         Button shopButton = new Button();
         Image shopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/shop.png")));
