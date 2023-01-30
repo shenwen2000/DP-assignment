@@ -4,7 +4,6 @@ import com.farm.dp_assignment.composite.Shop;
 import com.farm.dp_assignment.decorator.*;
 import com.farm.dp_assignment.simpleFactory.SimpleAnimalFactory;
 import com.farm.dp_assignment.singleton.SingletonWallet;
-import com.farm.dp_assignment.singleton.WalletFactory;
 import com.farm.dp_assignment.strategy.Idle;
 import com.farm.dp_assignment.strategy.MoveBehavior;
 import com.farm.dp_assignment.strategy.MoveOnGround;
@@ -46,7 +45,7 @@ public class Farm {
 
     public static Shop shop;
 
-    private static SingletonWallet wallet;
+    private static SingletonWallet wallet = SingletonWallet.getInstance();
 
     public static double screenWidth;
 
@@ -148,11 +147,6 @@ public class Farm {
 
         HBox coinBox = new HBox(5);
 
-        //WalletFactory
-        WalletFactory walletFactory = new WalletFactory();
-
-        // Singleton wallet
-        wallet = walletFactory.getWallet();
         int totalCoin = wallet.getTotalAmount();
 
         String totalCoinStr = Integer.toString(totalCoin);
@@ -367,8 +361,7 @@ public class Farm {
         confirmBtn.setOnMouseExited(e -> confirmBtn.setStyle(IDLE_BUTTON_STYLE));
         confirmBtn.setAlignment(Pos.BASELINE_RIGHT);
 
-        WalletFactory walletFactory = new WalletFactory();
-        SingletonWallet wallet = walletFactory.getWallet();
+        SingletonWallet wallet = SingletonWallet.getInstance();
         ProgressBar growthPointBar = new ProgressBar();
         ProgressIndicator growthPoint = new ProgressIndicator(0);
 

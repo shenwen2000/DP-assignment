@@ -2,7 +2,6 @@ package com.farm.dp_assignment.composite;
 
 import com.farm.dp_assignment.Farm;
 import com.farm.dp_assignment.singleton.SingletonWallet;
-import com.farm.dp_assignment.singleton.WalletFactory;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
