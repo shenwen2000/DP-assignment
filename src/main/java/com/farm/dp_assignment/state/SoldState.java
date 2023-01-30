@@ -6,8 +6,9 @@ import com.farm.dp_assignment.Farm;
 public class SoldState implements State {
     Animal animal;
     Farm farm;
+
     public SoldState() {
-        animal=null;
+        animal = null;
     }
 
     @Override

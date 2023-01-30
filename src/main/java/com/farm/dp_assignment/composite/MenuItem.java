@@ -15,7 +15,6 @@ import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.net.URISyntaxException;
 import java.util.Objects;
 
 public class MenuItem extends MenuComponent {
@@ -92,7 +91,6 @@ public class MenuItem extends MenuComponent {
     public void setType(String type) {
         this.type = type;
     }
-
 
     //print menu item as a row in the pop up window
     public VBox print(VBox vBox, MenuComponent menuComponent) {
@@ -195,8 +193,6 @@ public class MenuItem extends MenuComponent {
         Button cancelButton = new Button("Cancel");
         cancelButton.setStyle(IDLE_CANCEL_STYLE);
 
-
-
         // Get the wallet amount and check enuf or not, then unlock
         confirmButton.setOnAction(e -> {
 
@@ -217,10 +213,10 @@ public class MenuItem extends MenuComponent {
 
                         farm.updateCoinAmount();
                     } else {
-                        setAlertMsg(getLocked() ? "Unlock" : "Buy", getType());
+                        setAlertMsg(getLocked() ? "Unlock" : "Buy", getName());
                     }
                 } else {
-                    if (Objects.isNull(farm.getAnimal())){
+                    if (Objects.isNull(farm.getAnimal())) {
                         buyAnimal();
                     } else {
                         confirmChgAnimal();
@@ -284,7 +280,7 @@ public class MenuItem extends MenuComponent {
         window.showAndWait();
     }
 
-    private void confirmChgAnimal(){
+    private void confirmChgAnimal() {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
 
@@ -336,13 +332,16 @@ public class MenuItem extends MenuComponent {
         window.showAndWait();
     }
 
-    private void buyAnimal(){
-        wallet.deductAmount(getPrice());
-        farm.setAnimal(null);
-        farm.setSlider(null);
-        farm.setGrowthPointBar(null);
-        farm.setGrowthPoint(null);
-        farm.setAnimalImageView(null);
-        farm.createAnimal(getName());
+    private void buyAnimal() {
+        if (!wallet.deductAmount(getPrice())) {
+            setAlertMsg(getLocked() ? "Unlock" : "Buy", getName());
+        } else {
+            farm.setAnimal(null);
+            farm.setSlider(null);
+            farm.setGrowthPointBar(null);
+            farm.setGrowthPoint(null);
+            farm.setAnimalImageView(null);
+            farm.createAnimal(getName());
+        }
     }
 }
