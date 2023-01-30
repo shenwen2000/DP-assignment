@@ -30,10 +30,6 @@ public class YoungState implements State {
     @Override
     public void checkingCondition() {
         try {
-            System.out.println(animal.getClass().getName());
-            System.out.println(animal.getClass().getName().contains("Chicken"));
-            System.out.println(animal.getGrowthPoints() >= 5);
-            System.out.println(animal.getGrowthPoints());
             if (animal.getClass().getName().contains("Chicken") && animal.getGrowthPoints() >= 10) {
                 chickenImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/chicken_3.png").toURI().toString()));
 

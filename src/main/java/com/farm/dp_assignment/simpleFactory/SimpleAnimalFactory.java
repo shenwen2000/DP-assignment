@@ -24,12 +24,16 @@ public class SimpleAnimalFactory {
 
         if (animalType.equals("Chicken")) {
             animal = new Chicken(chickenImage);
+            animal.setType("Chicken");
         } else if (animalType.equals("Cow")) {
             animal = new Cow(cowImage);
+            animal.setType("Cow");
         } else if (animalType.equals("Duck")) {
             animal = new Duck(duckImage);
+            animal.setType("Duck");
         } else if (animalType.equals("Goat")) {
             animal = new Goat(goatImage);
+            animal.setType("Goat");
         }
 
         animal.setState(new NewBornState(animal));

@@ -297,10 +297,11 @@ public class Farm {
         return scene;
     }
 
-    public static void createAnimal(String nameType) {
+    public void createAnimal(String nameType) {
         animal = factory.createAnimal(nameType);
         MoveBehavior.translate.stop();
         refreshFarmPage();
+        setUpProgressBar(nameType);
     }
 
     public void setAddIngredientPage() {
@@ -472,5 +473,24 @@ public class Farm {
 
     public void setAnimalImageView(ImageView animalImageView) {
         this.animalImageView = animalImageView;
+    }
+
+    private void setUpProgressBar(String type) {
+        switch (type) {
+            case "Chicken":
+                slider.setMax(5);
+                break;
+            case "Duck":
+                slider.setMax(10);
+                break;
+            case "Cow":
+                slider.setMax(50);
+                break;
+            case "Goat":
+                slider.setMax(125);
+                break;
+            default:
+                return;
+        }
     }
 }

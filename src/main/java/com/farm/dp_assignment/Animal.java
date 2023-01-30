@@ -11,6 +11,7 @@ public abstract class Animal {
     Image image;
     State state;
     int growthPoints;
+    String type;
 
     public Animal() {
 
@@ -54,5 +55,13 @@ public abstract class Animal {
 
     public void checkConditionState() {
         state.checkingCondition();
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
