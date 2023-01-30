@@ -84,6 +84,7 @@ public class FullyGrownState implements State {
                 animal.setType(null);
                 wallet.addAmount(coin);
                 System.out.println(wallet.getTotalAmount());
+                farm.updateCoinAmount();
                 animal.setState(new SoldState());
                 window.close();
             }
