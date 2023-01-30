@@ -2,6 +2,7 @@ package com.farm.dp_assignment.simpleFactory;
 
 import com.farm.dp_assignment.Animal;
 import com.farm.dp_assignment.LocatedImage;
+import com.farm.dp_assignment.state.NewBornState;
 import com.farm.dp_assignment.strategy.*;
 import javafx.scene.image.Image;
 
@@ -31,6 +32,7 @@ public class SimpleAnimalFactory {
             animal = new Goat(goatImage);
         }
 
+        animal.setState(new NewBornState(animal));
         return animal;
     }
 }

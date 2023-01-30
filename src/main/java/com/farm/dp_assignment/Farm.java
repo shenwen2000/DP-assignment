@@ -397,6 +397,10 @@ public class Farm {
             growthPoint.setProgress(growthPoint.getProgress() + (animalFood.growthPoint() / slider.getMax()));
             growthPointBar.setProgress(growthPointBar.getProgress() + (animalFood.growthPoint() / slider.getMax()));
             this.updateCoinAmount();
+
+            if (growthPointBar.getProgress() >= 1) {
+                animal.checkConditionState();
+            }
             window.close();
         });
 
@@ -461,11 +465,11 @@ public class Farm {
         return shop;
     }
 
-    public ImageView getAnimalImageView(){
+    public ImageView getAnimalImageView() {
         return animalImageView;
     }
 
-    public void setAnimalImageView(ImageView animalImageView){
+    public void setAnimalImageView(ImageView animalImageView) {
         this.animalImageView = animalImageView;
     }
 }

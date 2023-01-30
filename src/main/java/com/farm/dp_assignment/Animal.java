@@ -51,4 +51,8 @@ public abstract class Animal {
     public int getGrowthPoints() {
         return growthPoints;
     }
+
+    public void checkConditionState() {
+        state.checkingCondition();
+    }
 }
