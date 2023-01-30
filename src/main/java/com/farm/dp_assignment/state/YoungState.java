@@ -23,11 +23,13 @@ public class YoungState implements State {
     ImageView imageView;
     boolean change = false;
 
+    //Constructor
     public YoungState(Animal animal) {
         farm = Farm.getInstance();
         this.animal = animal;
     }
 
+    //Check if growth point is enough to evolve to FullyGrown state
     @Override
     public void checkingCondition() {
         try {
