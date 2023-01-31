@@ -15,6 +15,7 @@ public class SoldState implements State {
     //Sold
     @Override
     public void checkingCondition() {
+        farm.setStageNumber("0");
         farm.getFarmLayout().setCenter(null);
     }
 }

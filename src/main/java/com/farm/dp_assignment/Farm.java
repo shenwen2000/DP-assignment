@@ -47,6 +47,7 @@ public class Farm {
     }
 
     private static Animal animal = null;
+    public static Text stageNumber;
 
     final String IDLE_BUTTON_STYLE = "-fx-background-color: #676AC2; -fx-border-color: #676AC2; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
     final String HOVERED_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #676AC2; -fx-text-fill: #676AC2; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
@@ -148,7 +149,7 @@ public class Farm {
         circle.setFill(Color.AZURE);
         circle.relocate(0, 0);
 
-        Text stageNumber = new Text("1");
+        stageNumber = new Text("1");
         stageNumber.setStyle("-fx-font-size: 20px");
         stageNumber.setBoundsType(TextBoundsType.VISUAL);
         StackPane stageGrowth = new StackPane();
@@ -496,5 +497,8 @@ public class Farm {
             default:
                 return;
         }
+    }
+    public void setStageNumber(String s){
+        stageNumber.setText(s);
     }
 }
