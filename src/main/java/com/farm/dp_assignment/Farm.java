@@ -33,6 +33,7 @@ import java.util.Objects;
 public class Farm {
 
     public static Stage startingScene;
+
     Button startButton;
 
     static SimpleAnimalFactory factory;
@@ -297,10 +298,11 @@ public class Farm {
         return scene;
     }
 
-    public static void createAnimal(String nameType) {
+    public void createAnimal(String nameType) {
         animal = factory.createAnimal(nameType);
         MoveBehavior.translate.stop();
         refreshFarmPage();
+        setUpProgressBar(nameType);
     }
 
     public void setAddIngredientPage() {
@@ -362,6 +364,7 @@ public class Farm {
         vitaminImageView.setFitHeight(100);
         vitaminButton.setStyle("-fx-cursor: hand;");
 
+        // action of the vitamin button
         vitaminButton.setOnAction(e -> {
             animalFood = new Vitamin(animalFood);
             addedIngredientListText.setText(animalFood.getDescription());
@@ -392,6 +395,7 @@ public class Farm {
 
         // set the action at here
         confirmBtn.setOnAction(e -> {
+
             wallet.deductAmount(animalFood.cost());
             growthPoint.setProgress(growthPoint.getProgress() + (animalFood.growthPoint() / slider.getMax()));
             growthPointBar.setProgress(growthPointBar.getProgress() + (animalFood.growthPoint() / slider.getMax()));
@@ -399,6 +403,7 @@ public class Farm {
 
             animal.setGrowthPoints((int) (animal.getGrowthPoints() + animalFood.growthPoint()));
 
+            //update the state if progress bar is full
             if (growthPointBar.getProgress() >= 1) {
                 animal.checkConditionState();
             }
@@ -472,5 +477,24 @@ public class Farm {
 
     public void setAnimalImageView(ImageView animalImageView) {
         this.animalImageView = animalImageView;
+    }
+
+    private void setUpProgressBar(String type) {
+        switch (type) {
+            case "Chicken":
+                slider.setMax(5);
+                break;
+            case "Duck":
+                slider.setMax(10);
+                break;
+            case "Cow":
+                slider.setMax(50);
+                break;
+            case "Goat":
+                slider.setMax(125);
+                break;
+            default:
+                return;
+        }
     }
 }

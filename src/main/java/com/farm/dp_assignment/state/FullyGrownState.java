@@ -2,50 +2,48 @@ package com.farm.dp_assignment.state;
 
 import com.farm.dp_assignment.Animal;
 import com.farm.dp_assignment.Farm;
+import com.farm.dp_assignment.singleton.SingletonWallet;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.util.Objects;
-import java.util.Timer;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 public class FullyGrownState implements State {
     Animal animal;
     Farm farm;
-    int coin = 0;
     final String IDLE_BUTTON_STYLE = "-fx-background-color: #676AC2; -fx-border-color: #676AC2; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
     final String HOVERED_BUTTON_STYLE = "-fx-background-color: white; -fx-border-color: #676AC2; -fx-text-fill: #676AC2; -fx-cursor: hand; -fx-border-radius: 5px; -fx-font-weight: bold";
+    boolean change = false;
+    SingletonWallet wallet;
+    int coin = 0;
 
+    //Constructor
     public FullyGrownState(Animal animal) {
-        farm=Farm.getInstance();
+        farm = Farm.getInstance();
         this.animal = animal;
+        wallet = SingletonWallet.getInstance();
     }
 
+    //Check coin amount to earn after selling the animal
     @Override
     public void checkingCondition() {
-        if (animal.getClass().getName().contains("Chicken")) {
+        if (animal.getType().equals("Chicken")) {
             coin = 3;
-        } else if (animal.getClass().getName().contains("Duck")) {
+        } else if (animal.getType().equals("Duck")) {
             coin = 6;
-        } else if (animal.getClass().getName().contains("Cow")) {
+        } else if (animal.getType().equals("Cow")) {
             coin = 30;
-        } else if (animal.getClass().getName().contains("Goat")) {
+        } else if (animal.getType().equals("Goat")) {
             coin = 75;
         }
-        //Subject to change
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -71,12 +69,20 @@ public class FullyGrownState implements State {
         okayBtn.setOnMouseExited(e -> okayBtn.setStyle(IDLE_BUTTON_STYLE));
 
         okayBtn.setOnAction(e -> {
-            farm.setAnimalImageView(null);
-            animal.setImage(null);
-            farm.setAnimal(null);
-            animal.setImage(null);
-            animal.setState(new SoldState());
-            window.close();
+            change = true;
+            //Sell the animal
+            if (change) {
+                farm.setSlider(null);
+                farm.setGrowthPoint(null);
+                farm.setGrowthPointBar(null);
+                farm.setAnimalImageView(null);
+                farm.setAnimal(null);
+                wallet.addAmount(coin);
+                animal.setState(new SoldState(animal));
+                animal.checkConditionState();
+                farm.updateCoinAmount();
+                window.close();
+            }
         });
 
         alertLayout.setRight(okayBtn);
@@ -85,7 +91,5 @@ public class FullyGrownState implements State {
         Scene scene = new Scene(alertLayout);
         window.setScene(scene);
         window.showAndWait();
-
-
     }
 }

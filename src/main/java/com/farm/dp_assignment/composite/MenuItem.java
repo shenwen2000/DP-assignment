@@ -1,6 +1,7 @@
 package com.farm.dp_assignment.composite;
 
 import com.farm.dp_assignment.Farm;
+import com.farm.dp_assignment.decorator.*;
 import com.farm.dp_assignment.singleton.SingletonWallet;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,7 +16,6 @@ import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.net.URISyntaxException;
 import java.util.Objects;
 
 public class MenuItem extends MenuComponent {
@@ -93,7 +93,6 @@ public class MenuItem extends MenuComponent {
         this.type = type;
     }
 
-
     //print menu item as a row in the pop up window
     public VBox print(VBox vBox, MenuComponent menuComponent) {
         StackPane stackPane = new StackPane();
@@ -165,6 +164,7 @@ public class MenuItem extends MenuComponent {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
 
+        // Window title
         if (getLocked()) {
             window.setTitle("Unlock " + getName());
         } else {
@@ -179,6 +179,7 @@ public class MenuItem extends MenuComponent {
 
         VBox content = new VBox(10);
 
+        // Unlock message
         Text unlockMsg = new Text(getLocked() ? "Are you sure to unlock " + getName() : "Are you sure to buy " + getName());
         unlockMsg.setStyle("-fx-font-size: 15px; -fx-font-vertical-align:top");
         unlockMsg.setBoundsType(TextBoundsType.VISUAL);
@@ -195,32 +196,32 @@ public class MenuItem extends MenuComponent {
         Button cancelButton = new Button("Cancel");
         cancelButton.setStyle(IDLE_CANCEL_STYLE);
 
-
-
-        // Get the wallet amount and check enuf or not, then unlock
         confirmButton.setOnAction(e -> {
-
             if (getType().equals("Animal")) {
                 if (getLocked()) {
+                    // check the amount of the wallet enough to buy or unlock
                     if (wallet.getTotalAmount() >= getPrice()) {
                         // set lock status to unlock
                         setLocked(!getLocked());
 
+                        // deduct amount
                         wallet.deductAmount(getPrice());
 
                         // refresh again the manu page
                         VBox vBox = new VBox(10);
                         vBox = farm.getShop().getAllMenus().print(vBox, farm.getShop().getAllMenus());
 
+                        // Set up the new menu
                         farm.getShop().shopLayout.setCenter(vBox);
                         farm.getShop().shopLayout.setAlignment(vBox, Pos.TOP_LEFT);
 
+                        // update the coin amount
                         farm.updateCoinAmount();
                     } else {
-                        setAlertMsg(getLocked() ? "Unlock" : "Buy", getType());
+                        setAlertMsg(getLocked() ? "Unlock" : "Buy", getName());
                     }
                 } else {
-                    if (Objects.isNull(farm.getAnimal())){
+                    if (Objects.isNull(farm.getAnimal())) {
                         buyAnimal();
                     } else {
                         confirmChgAnimal();
@@ -228,7 +229,24 @@ public class MenuItem extends MenuComponent {
                 }
             } else {
                 if (getName().equals("Premium food")) {
-                    farm.setAddIngredientPage();
+                    //error message if there is no animal
+                    if (farm.getAnimal() == null) {
+                        noAnimalMsg();
+                    } else farm.setAddIngredientPage();
+                } else if (getName().equals("Normal food")) {
+                    //error message if there is no animal
+                    if (farm.getAnimal() == null) {
+                        noAnimalMsg();
+                    } else {
+                        //update progress bar
+                        AnimalFood animalFood = new Food();
+                        farm.getGrowthPoint().setProgress(farm.getGrowthPoint().getProgress() + (animalFood.growthPoint() / farm.getSlider().getMax()));
+                        farm.getGrowthPointBar().setProgress(farm.getGrowthPointBar().getProgress() + (animalFood.growthPoint() / farm.getSlider().getMax()));
+                        //update the state if progress bar is full
+                        if (farm.getGrowthPointBar().getProgress() >= 1) {
+                            farm.getAnimal().checkConditionState();
+                        }
+                    }
                 }
             }
 
@@ -246,6 +264,39 @@ public class MenuItem extends MenuComponent {
         farmLayout.setAlignment(content, Pos.TOP_LEFT);
 
         Scene scene = new Scene(farmLayout);
+        window.setScene(scene);
+        window.showAndWait();
+    }
+
+    private void noAnimalMsg() {
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setMaxWidth(550);
+        window.setMinHeight(150);
+        window.setTitle("Alert");
+
+        Text alertMsg = new Text("You have no animal to feed. Please buy a new animal first.");
+        alertMsg.setStyle("-fx-font-size: 15px; -fx-font-vertical-align:top");
+        alertMsg.setBoundsType(TextBoundsType.VISUAL);
+
+        BorderPane alertLayout = new BorderPane();
+        alertLayout.setPadding(new Insets(10, 10, 10, 10));
+        alertLayout.setCenter(alertMsg);
+        alertLayout.setAlignment(alertMsg, Pos.CENTER);
+
+        Button okayBtn = new Button("Okay");
+        okayBtn.setStyle(IDLE_BUTTON_STYLE);
+        okayBtn.setOnMouseEntered(e -> okayBtn.setStyle(HOVERED_BUTTON_STYLE));
+        okayBtn.setOnMouseExited(e -> okayBtn.setStyle(IDLE_BUTTON_STYLE));
+
+        okayBtn.setOnAction(e -> {
+            window.close();
+        });
+
+        alertLayout.setRight(okayBtn);
+        alertLayout.setAlignment(okayBtn, Pos.BOTTOM_RIGHT);
+
+        Scene scene = new Scene(alertLayout);
         window.setScene(scene);
         window.showAndWait();
     }
@@ -284,7 +335,8 @@ public class MenuItem extends MenuComponent {
         window.showAndWait();
     }
 
-    private void confirmChgAnimal(){
+    // pop up confirm message when buy a new animal
+    private void confirmChgAnimal() {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
 
@@ -336,13 +388,17 @@ public class MenuItem extends MenuComponent {
         window.showAndWait();
     }
 
-    private void buyAnimal(){
-        wallet.deductAmount(getPrice());
-        farm.setAnimal(null);
-        farm.setSlider(null);
-        farm.setGrowthPointBar(null);
-        farm.setGrowthPoint(null);
-        farm.setAnimalImageView(null);
-        farm.createAnimal(getName());
+    // Buy animal method
+    private void buyAnimal() {
+        if (!wallet.deductAmount(getPrice())) {
+            setAlertMsg(getLocked() ? "Unlock" : "Buy", getName());
+        } else {
+            farm.setAnimal(null);
+            farm.setSlider(null);
+            farm.setGrowthPointBar(null);
+            farm.setGrowthPoint(null);
+            farm.setAnimalImageView(null);
+            farm.createAnimal(getName());
+        }
     }
 }
