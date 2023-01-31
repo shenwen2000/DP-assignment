@@ -77,6 +77,7 @@ public class FullyGrownState implements State {
                 farm.setGrowthPointBar(null);
                 farm.setAnimalImageView(null);
                 farm.setAnimal(null);
+                farm.setStageNumber("4");
                 wallet.addAmount(coin);
                 animal.setState(new SoldState(animal));
                 animal.checkConditionState();
