@@ -27,11 +27,6 @@ public class Animal {
         moveBehavior = mb;
     }
 
-    // Get the move behavior of the animal
-    public MoveBehavior getMoveBehavior() {
-        return moveBehavior;
-    }
-
     // Get the image of the animal
     public Image getImage() {
         return image;
