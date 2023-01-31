@@ -1,7 +1,6 @@
 package com.farm.dp_assignment.composite;
 
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public abstract class MenuComponent {
@@ -26,7 +25,7 @@ public abstract class MenuComponent {
         throw new UnsupportedOperationException();
     }
 
-    public VBox print(VBox vBox, MenuComponent menuComponent) {
+    public VBox printMenu(VBox vBox, MenuComponent menuComponent) {
         throw new UnsupportedOperationException();
     }
 }

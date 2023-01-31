@@ -22,7 +22,7 @@ public class Sleeping implements MoveBehavior {
             String path = "/com/farm/dp_assignment/image/" + sleepImageName + ".png";
             try {
                 farm.getAnimal().setImage(new LocatedImage(Objects.requireNonNull(getClass().getResource(path).toURI().toString())));
-                Farm.setUpFarmPage();
+                farm.setUpFarmPage();
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }

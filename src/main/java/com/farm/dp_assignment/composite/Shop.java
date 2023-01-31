@@ -3,7 +3,6 @@ package com.farm.dp_assignment.composite;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -49,7 +48,7 @@ public class Shop {
 
         VBox vBox = new VBox(10);
 
-        vBox = this.allMenus.print(vBox, this.allMenus);
+        vBox = this.allMenus.printMenu(vBox, this.allMenus);
 
         shopLayout.setCenter(vBox);
         shopLayout.setAlignment(vBox, Pos.TOP_LEFT);
@@ -65,7 +64,7 @@ public class Shop {
         Image animalShopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/pet_shop.png")));
         Image feedShopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/feed.png")));
 
-        animalMenu = new Menu("Animal Shop", animalShopImage, "Animal");
+        animalMenu = new Menu("Animal Menu", animalShopImage, "Animal");
         foodMenu = new Menu("Food Menu", feedShopImage, "Food");
 
         allMenus = new Menu("Menus", allMenusImage, "All");

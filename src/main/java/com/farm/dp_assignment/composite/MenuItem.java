@@ -94,7 +94,7 @@ public class MenuItem extends MenuComponent {
     }
 
     //print menu item as a row in the pop up window
-    public VBox print(VBox vBox, MenuComponent menuComponent) {
+    public VBox printMenu(VBox vBox, MenuComponent menuComponent) {
         StackPane stackPane = new StackPane();
 
         FlowPane menuItemBox = new FlowPane();
@@ -209,7 +209,7 @@ public class MenuItem extends MenuComponent {
 
                         // refresh again the manu page
                         VBox vBox = new VBox(10);
-                        vBox = farm.getShop().getAllMenus().print(vBox, farm.getShop().getAllMenus());
+                        vBox = farm.getShop().getAllMenus().printMenu(vBox, farm.getShop().getAllMenus());
 
                         // Set up the new menu
                         farm.getShop().shopLayout.setCenter(vBox);

@@ -116,7 +116,7 @@ public class Farm {
         startingScene.show();
     }
 
-    public static Scene setUpFarmPage() {
+    public Scene setUpFarmPage() {
 
         farmLayout = new BorderPane();
         farmLayout.setPadding(new Insets(10, 10, 10, 10));
@@ -423,7 +423,7 @@ public class Farm {
         window.showAndWait();
     }
 
-    public static void refreshFarmPage() {
+    public void refreshFarmPage() {
         startingScene = Main.primaryStage;
         startingScene.setScene(setUpFarmPage());
     }

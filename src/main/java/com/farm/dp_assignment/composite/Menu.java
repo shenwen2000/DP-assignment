@@ -3,7 +3,6 @@ package com.farm.dp_assignment.composite;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
@@ -54,7 +53,7 @@ public class Menu extends MenuComponent {
     }
 
     //print the whole menu with the items in the menu
-    public VBox print(VBox vBox, MenuComponent menuComponent) {
+    public VBox printMenu(VBox vBox, MenuComponent menuComponent) {
         Iterator<MenuComponent> menuIterator = menuComponents.iterator();
 
         VBox menuVbox = new VBox(10);
@@ -94,7 +93,7 @@ public class Menu extends MenuComponent {
         while (menuIterator.hasNext()) {
             MenuComponent menu = menuIterator.next();
             VBox tempVbox = new VBox(10);
-            tempVbox = menu.print(tempVbox, menuComponent);
+            tempVbox = menu.printMenu(tempVbox, menuComponent);
             tempVbox.setStyle("-fx-margin-bottom: 15px");
             menuVbox.getChildren().addAll(tempVbox);
         }
