@@ -132,7 +132,7 @@ public class MenuItem extends MenuComponent {
         if (getName().equals("Premium food")) {
             price = new Text("Will according to ingredient(s) added");
         } else {
-            price = new Text((getPrice() == 0 ? "Free" : String.valueOf(getPrice())));
+            price = new Text((getPrice() == 0 ? "Free" : "(" + getPrice() + (getPrice() > 1 ? " coins)" : " coin)")));
         }
 
         price.setStyle("-fx-font-size: 15px; -fx-font-vertical-align:top");
@@ -143,7 +143,8 @@ public class MenuItem extends MenuComponent {
         //add lock image for the animals that are locked
         if (getType().equals("Animal")) {
             if (getLocked()) {
-                Image lockImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/lock.png")));
+                Image lockImage = new Image(Objects.requireNonNull(getClass()
+                        .getResourceAsStream("/com/farm/dp_assignment/image/lock.png")));
                 ImageView lockImageView = new ImageView(lockImage);
                 lockImageView.setFitWidth(50);
                 lockImageView.setFitHeight(50);

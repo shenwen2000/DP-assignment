@@ -149,7 +149,7 @@ public class Farm {
         circle.setFill(Color.AZURE);
         circle.relocate(0, 0);
 
-        stageNumber = new Text("1");
+        stageNumber = new Text("0");
         stageNumber.setStyle("-fx-font-size: 20px");
         stageNumber.setBoundsType(TextBoundsType.VISUAL);
         StackPane stageGrowth = new StackPane();
@@ -304,6 +304,7 @@ public class Farm {
         MoveBehavior.translate.stop();
         refreshFarmPage();
         setUpProgressBar(nameType);
+        this.setStageNumber("1");
     }
 
     public void setAddIngredientPage() {
@@ -312,6 +313,7 @@ public class Farm {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Add Ingredient(s)");
+        window.setMinHeight(650);
 
         BorderPane ingredientPageLayout = new BorderPane();
         ingredientPageLayout.setPadding(new Insets(10, 10, 10, 10));
@@ -326,10 +328,15 @@ public class Farm {
         addedIngredientListText.setBoundsType(TextBoundsType.VISUAL);
         addedIngredientListText.setTextAlignment(TextAlignment.LEFT);
 
-        Text priceText = new Text("Price:2");
+        Text priceText = new Text("Price:(Free)");
         priceText.setStyle("-fx-font-size: 15px; -fx-font-weight: bold");
         priceText.setBoundsType(TextBoundsType.VISUAL);
         priceText.setTextAlignment(TextAlignment.LEFT);
+
+        Text growthPointText = new Text("Growth point:(1 GP)");
+        growthPointText.setStyle("-fx-font-size: 15px; -fx-font-weight: bold");
+        growthPointText.setBoundsType(TextBoundsType.VISUAL);
+        growthPointText.setTextAlignment(TextAlignment.LEFT);
 
         VBox ingredientSec = new VBox(10);
 
@@ -352,7 +359,10 @@ public class Farm {
         proteinButton.setOnAction(e -> {
             animalFood = new Protein(animalFood);
             addedIngredientListText.setText(animalFood.getDescription());
-            priceText.setText("Price:" + String.valueOf(animalFood.cost()));
+            priceText.setText("Price:(" + (animalFood.cost() == 0 ? "Free" :
+                    animalFood.cost()) + (animalFood.cost() > 1 ? " coins)" : " coin)"));
+            growthPointText.setText("Growth point:(" + animalFood.growthPoint()
+                    + (animalFood.cost() > 1 ? " GPs)" : " GP)"));
         });
 
         // create vitamin button
@@ -369,7 +379,10 @@ public class Farm {
         vitaminButton.setOnAction(e -> {
             animalFood = new Vitamin(animalFood);
             addedIngredientListText.setText(animalFood.getDescription());
-            priceText.setText("Price:" + String.valueOf(animalFood.cost()));
+            priceText.setText("Price:(" + (animalFood.cost() == 0 ? "Free" :
+                    animalFood.cost()) + (animalFood.cost() > 1 ? " coins)" : " coin)"));
+            growthPointText.setText("Growth point:(" + animalFood.growthPoint()
+                    + (animalFood.cost() > 1 ? " GPs)" : " GP)"));
         });
 
         ingredientSec.getChildren().addAll(proteinButton, vitaminButton);
@@ -385,7 +398,7 @@ public class Farm {
         lineBreak1.setBoundsType(TextBoundsType.VISUAL);
         lineBreak1.setTextAlignment(TextAlignment.LEFT);
 
-        ingredientPriceList.getChildren().addAll(ingredientListText, addedIngredientListText, lineBreak1, priceText);
+        ingredientPriceList.getChildren().addAll(ingredientListText, addedIngredientListText, lineBreak1, priceText, growthPointText);
         content.getChildren().addAll(ingredientSec, ingredientPriceList);
 
         Button confirmBtn = new Button("Confirm");
@@ -498,7 +511,8 @@ public class Farm {
                 return;
         }
     }
-    public void setStageNumber(String s){
+
+    public void setStageNumber(String s) {
         stageNumber.setText(s);
     }
 }

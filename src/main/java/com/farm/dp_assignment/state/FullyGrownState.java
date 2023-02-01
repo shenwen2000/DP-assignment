@@ -72,6 +72,8 @@ public class FullyGrownState implements State {
             change = true;
             //Sell the animal
             if (change) {
+                farm.getGrowthPointBar().setProgress(0);
+                farm.getGrowthPoint().setProgress(0);
                 farm.setSlider(null);
                 farm.setGrowthPoint(null);
                 farm.setGrowthPointBar(null);
