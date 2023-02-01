@@ -34,21 +34,24 @@ public class NewBornState implements State {
     public void checkingCondition() {
         try {
             if (animal.getType().equals("Chicken") && animal.getGrowthPoints() >= 5) {
-                chickenImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/chicken_2.png").toURI().toString()));
+                chickenImage = new LocatedImage(Objects
+                        .requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/chicken_2.png").toURI().toString()));
                 animal.setImage(chickenImage);
                 imageView = new ImageView(animal.getImage());
 
                 farm.getSlider().setMax(10);
                 change = true;
             } else if (animal.getType().equals("Duck") && animal.getGrowthPoints() >= 10) {
-                duckImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/duck_2.png").toURI().toString()));
+                duckImage = new LocatedImage(Objects
+                        .requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/duck_2.png").toURI().toString()));
                 animal.setImage(duckImage);
                 imageView = new ImageView(animal.getImage());
 
                 farm.getSlider().setMax(20);
                 change = true;
             } else if (animal.getType().equals("Cow") && animal.getGrowthPoints() >= 50) {
-                cowImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/cow_2.png").toURI().toString()));
+                cowImage = new LocatedImage(Objects.requireNonNull(getClass()
+                        .getResource("/com/farm/dp_assignment/image/cow_2.png").toURI().toString()));
                 animal.setImage(cowImage);
                 imageView = new ImageView(animal.getImage());
 

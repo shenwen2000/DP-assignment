@@ -10,10 +10,14 @@ import java.util.Objects;
 public class SimpleAnimalFactory {
 
     // Define animals' image
-    Image chickenImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/chicken_1.png").toURI().toString()));
-    Image duckImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/duck_1.png").toURI().toString()));
-    Image cowImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/cow_1.png").toURI().toString()));
-    Image goatImage = new LocatedImage(Objects.requireNonNull(getClass().getResource("/com/farm/dp_assignment/image/goat_1.png").toURI().toString()));
+    Image chickenImage = new LocatedImage(Objects.requireNonNull(getClass()
+            .getResource("/com/farm/dp_assignment/image/chicken_1.png").toURI().toString()));
+    Image duckImage = new LocatedImage(Objects.requireNonNull(getClass()
+            .getResource("/com/farm/dp_assignment/image/duck_1.png").toURI().toString()));
+    Image cowImage = new LocatedImage(Objects.requireNonNull(getClass()
+            .getResource("/com/farm/dp_assignment/image/cow_1.png").toURI().toString()));
+    Image goatImage = new LocatedImage(Objects.requireNonNull(getClass()
+            .getResource("/com/farm/dp_assignment/image/goat_1.png").toURI().toString()));
 
     // Constructor
     public SimpleAnimalFactory() throws URISyntaxException {

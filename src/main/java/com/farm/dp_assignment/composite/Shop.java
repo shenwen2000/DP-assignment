@@ -60,9 +60,12 @@ public class Shop {
 
     //create list of menus
     private void createMenuList() {
-        Image allMenusImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/hamburger.png")));
-        Image animalShopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/pet_shop.png")));
-        Image feedShopImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/feed.png")));
+        Image allMenusImage = new Image(Objects.requireNonNull(getClass()
+                .getResourceAsStream("/com/farm/dp_assignment/image/hamburger.png")));
+        Image animalShopImage = new Image(Objects.requireNonNull(getClass()
+                .getResourceAsStream("/com/farm/dp_assignment/image/pet_shop.png")));
+        Image feedShopImage = new Image(Objects.requireNonNull(getClass()
+                .getResourceAsStream("/com/farm/dp_assignment/image/feed.png")));
 
         animalMenu = new Menu("Animal Menu", animalShopImage, "Animal");
         foodMenu = new Menu("Food Menu", feedShopImage, "Food");
@@ -74,10 +77,14 @@ public class Shop {
 
     //add animal items to animal menu
     private void createAnimalMenuItemList(MenuComponent animalMenu) {
-        Image chickenImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/chicken_1.png")));
-        Image duckImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/duck_1.png")));
-        Image cowImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/cow_1.png")));
-        Image goatImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/goat_1.png")));
+        Image chickenImage = new Image(Objects.requireNonNull(getClass()
+                .getResourceAsStream("/com/farm/dp_assignment/image/chicken_1.png")));
+        Image duckImage = new Image(Objects.requireNonNull(getClass()
+                .getResourceAsStream("/com/farm/dp_assignment/image/duck_1.png")));
+        Image cowImage = new Image(Objects.requireNonNull(getClass()
+                .getResourceAsStream("/com/farm/dp_assignment/image/cow_1.png")));
+        Image goatImage = new Image(Objects.requireNonNull(getClass()
+                .getResourceAsStream("/com/farm/dp_assignment/image/goat_1.png")));
 
         animalMenu.add(new MenuItem("Chicken", false, 1, chickenImage, "Animal"));
         animalMenu.add(new MenuItem("Duck", true, 2, duckImage, "Animal"));
@@ -87,8 +94,10 @@ public class Shop {
 
     //add food items to food menu
     private void createFoodMenuItemList(MenuComponent foodMenu) {
-        Image foodImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/food.png")));
-        Image goodFoodImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/farm/dp_assignment/image/good_food.png")));
+        Image foodImage = new Image(Objects.requireNonNull(getClass()
+                .getResourceAsStream("/com/farm/dp_assignment/image/food.png")));
+        Image goodFoodImage = new Image(Objects.requireNonNull(getClass()
+                .getResourceAsStream("/com/farm/dp_assignment/image/good_food.png")));
 
         foodMenu.add(new MenuItem("Normal food", false, 0, foodImage, "Food"));
         foodMenu.add(new MenuItem("Premium food", false, 0, goodFoodImage, "Food"));
